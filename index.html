@@ -481,51 +481,67 @@ function globeTripDirections() {
 }
 </script>
 
-<section id="booking-hub" style="padding:32px 6%;background:#fffaf0;color:#123047;">
-  <h2>✈️ Travel Booking Hub</h2>
-  <p>Plan your journey, compare options, and find your next stay.</p>
+<section id="booking-hub" class="booking-hub">
+  <div class="booking-heading">
+    <span class="booking-eyebrow">YOUR NEXT ADVENTURE</span>
+    <h2>✈️ Travel Booking Hub</h2>
+    <p>From planning to takeoff, your journey starts here.</p>
+  </div>
 
-  <label for="booking-from">Departure city / Kota asal</label>
-  <input id="booking-from" placeholder="Example: Jakarta"
-    style="box-sizing:border-box;width:100%;padding:12px;margin:8px 0 16px;border:1px solid #ccc;border-radius:10px;">
+  <div class="booking-panel">
+    <div class="booking-field">
+      <label for="booking-from">📍 Departure City</label>
+      <input id="booking-from" type="text"
+        placeholder="Where are you leaving from?">
+    </div>
 
-  <label for="booking-to">Destination / Kota tujuan</label>
-  <input id="booking-to" placeholder="Example: Bali"
-    style="box-sizing:border-box;width:100%;padding:12px;margin:8px 0 16px;border:1px solid #ccc;border-radius:10px;">
+    <div class="booking-field">
+      <label for="booking-to">🌍 Destination</label>
+      <input id="booking-to" type="text"
+        placeholder="Where do you want to go?">
+    </div>
 
-  <label for="booking-depart">Departure date / Tanggal berangkat</label>
-  <input id="booking-depart" type="date"
-    style="box-sizing:border-box;width:100%;padding:12px;margin:8px 0 16px;border:1px solid #ccc;border-radius:10px;">
+    <div class="booking-field">
+      <label for="booking-depart">🗓️ Departure Date</label>
+      <input id="booking-depart" type="date">
+    </div>
 
-  <label for="booking-return">Return date / Tanggal pulang (optional)</label>
-  <input id="booking-return" type="date"
-    style="box-sizing:border-box;width:100%;padding:12px;margin:8px 0 16px;border:1px solid #ccc;border-radius:10px;">
+    <div class="booking-field">
+      <label for="booking-return">🗓️ Return Date (Optional)</label>
+      <input id="booking-return" type="date">
+    </div>
 
-  <label for="booking-guests">Travelers / Jumlah tamu</label>
-  <input id="booking-guests" type="number" min="1" max="20" value="1"
-    style="box-sizing:border-box;width:100%;padding:12px;margin:8px 0 20px;border:1px solid #ccc;border-radius:10px;">
+    <div class="booking-field booking-guests">
+      <label for="booking-guests">👥 Travelers</label>
+      <input id="booking-guests" type="number"
+        min="1" max="20" value="1">
+    </div>
 
-  <button type="button" onclick="gtSearchFlights()"
-    style="padding:13px;margin:4px;background:#087e80;color:white;border:0;border-radius:10px;">
-    Search Flights ✈️
-  </button>
+    <div class="booking-actions">
+      <button type="button" class="flight-btn"
+        onclick="gtSearchFlights()">
+        ✈️ Search Flights
+      </button>
 
-  <button type="button" onclick="gtSearchHotels()"
-    style="padding:13px;margin:4px;background:#123047;color:white;border:0;border-radius:10px;">
-    Find Hotels 🏨
-  </button>
+      <button type="button" class="hotel-btn"
+        onclick="gtSearchHotels()">
+        🏨 Find Hotels
+      </button>
 
-  <button type="button" onclick="gtSearchTransport()"
-    style="padding:13px;margin:4px;background:#e87856;color:white;border:0;border-radius:10px;">
-    Find Transport 🚆
-  </button>
+      <button type="button" class="transport-btn"
+        onclick="gtSearchTransport()">
+        🚆 Find Transport
+      </button>
+    </div>
 
-  <p style="font-size:13px;color:#555;margin-top:16px;">
-    Prices and availability are provided by external services and may change.
-    GlobeTrip does not sell tickets or confirm bookings directly.
-  </p>
+    <p class="booking-note">
+      Prices and availability are provided by external services
+      and may change. GlobeTrip does not directly sell tickets
+      or confirm bookings.
+    </p>
+  </div>
 </section>
-
+  
 <script>
 function gtValue(id) {
   return document.getElementById(id).value.trim();

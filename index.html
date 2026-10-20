@@ -32,6 +32,27 @@
       padding: 18px 6%;
       background: white;
     }
+    .site-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 12px 6%;
+  background: var(--navy);
+}
+
+.site-nav a {
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 9px 12px;
+  border-radius: 8px;
+}
+
+.site-nav a:hover {
+  background: var(--teal);
+}
 
     .brand {
       font-size: 23px;
@@ -153,7 +174,15 @@
       onclick="toggleLanguage()">EN</button>
   </header>
 
-  <section class="hero">
+    <nav class="site-nav">
+    <a href="#home" id="navHome">Home</a>
+    <a href="#features" id="navFeatures">Features</a>
+    <a href="#booking-hub" id="navBooking">Booking</a>
+    <a href="#maps-tool" id="navMaps">Maps</a>
+    <a href="#planner" id="navPlanner">Planner</a>
+  </nav>
+
+  <section class="hero" id="home">
     <div class="eyebrow" id="eyebrow">EXPLORE THE WORLD</div>
     <h1 id="headline">Your journey, your way.</h1>
     <p id="description">
@@ -242,8 +271,14 @@
         plannerTitle: "Your adventure starts here.",
         plannerDescription: "GlobeTrip is being built. Itinerary planning, weather forecasts, and price estimates will be added step by step.",
         plannerButton: "Find destinations →",
-        footer: "© 2026 GlobeTrip · Your Journey, Your Way."
+navHome: "Home",
+navFeatures: "Features",
+navBooking: "Booking",
+navMaps: "Maps",
+navPlanner: "Planner",
+footer: "© 2026 GlobeTrip · Your Journey, Your Way."
       },
+      
       id: {
         eyebrow: "JELAJAHI DUNIA",
         headline: "Your journey, your way.",
@@ -263,8 +298,15 @@
         d4: "Rencanakan pengeluaran untuk transportasi, hotel, dan aktivitas.",
         plannerTitle: "Petualanganmu dimulai di sini.",
         plannerDescription: "GlobeTrip sedang dibangun. Fitur pembuat itinerary, perkiraan cuaca, dan estimasi harga akan ditambahkan bertahap.",
+        
         plannerButton: "Cari destinasi →",
+        navHome: "Beranda",
+        navFeatures: "Fitur",
+        navBooking: "Pemesanan",
+        navMaps: "Peta",
+        navPlanner: "Perencana",
         footer: "© 2026 GlobeTrip · Your Journey, Your Way."
+    
       }
     };
 

@@ -1,968 +1,798 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="GlobeTrip membantu kamu merencanakan perjalanan, menjelajahi destinasi, dan mengatur anggaran liburan.">
+  <meta name="description" content="GlobeTrip membantu kamu merencanakan perjalanan, menjelajahi destinasi, memeriksa cuaca, mengatur anggaran, dan mencari pilihan perjalanan.">
+  <meta name="theme-color" content="#123047">
   <title>GlobeTrip — Your Journey, Your Way</title>
   <style>
     :root {
-      --navy: #123047;
-      --teal: #087e80;
-      --cream: #f7f6f0;
-      --coral: #ff886f;
-      --white: #ffffff;
+      --navy:#123047; --teal:#087e80; --cream:#f7f6f0;
+      --coral:#ff886f; --white:#fff; --muted:#526873;
+      --line:#d8e2df; --soft:#e0f1e9; --shadow:0 8px 24px rgba(18,48,71,.08);
     }
-    html {
-  scroll-behavior: smooth;
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: var(--cream);
-      color: var(--navy);
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      padding: 18px 6%;
-      background: white;
-    }
-    .site-nav {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  padding: 12px 6%;
-  background: var(--navy);
-}
-
-.site-nav a {
-  color: white;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 700;
-  padding: 9px 12px;
-  border-radius: 8px;
-}
-
-.site-nav a:hover {
-  background: var(--teal);
-}
-    .site-nav a:focus {
-  background: var(--teal);
-  outline: 2px solid var(--coral);
-  outline-offset: 2px;
-    }
-
-    .brand {
-      font-size: 23px;
-      font-weight: 800;
-      color: var(--teal);
-    }
-
-    button, a { cursor: pointer; }
-
-    .language, .primary, .secondary {
-      border: 0;
-      border-radius: 12px;
-      padding: 12px 16px;
-      font-weight: 700;
-      text-decoration: none;
-    }
-
-    .language, .secondary {
-      background: white;
-      color: var(--navy);
-      border: 1px solid #d8e2df;
-    }
-
-    .hero {
-      padding: 68px 7% 54px;
-      background: linear-gradient(135deg, #e0f1e9, #d8eeee);
-    }
-
-    .eyebrow {
-      color: var(--teal);
-      font-weight: 700;
-      letter-spacing: 2px;
-      font-size: 12px;
-    }
-
-    h1 {
-      font-size: clamp(38px, 8vw, 68px);
-      line-height: 1.08;
-      max-width: 680px;
-      margin: 16px 0;
-    }
-
-    .hero p {
-      max-width: 540px;
-      font-size: 17px;
-      line-height: 1.7;
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;scroll-padding-top:18px}
+    body{margin:0;font-family:Arial,sans-serif;background:var(--cream);color:var(--navy)}
+    button,input,select,textarea{font:inherit}
+    button,a{cursor:pointer}
+    a{color:var(--teal)}
+    button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--coral);outline-offset:3px}
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 6%;background:#fff}
+    .brand{font-size:23px;font-weight:800;color:var(--teal);text-decoration:none}
+    .language,.btn,.filter{border:0;border-radius:11px;padding:11px 15px;font-weight:700}
+    .language,.btn-light{background:#fff;color:var(--navy);border:1px solid var(--line)}
+    .site-nav{display:flex;align-items:center;gap:7px;flex-wrap:wrap;padding:11px 6%;background:var(--navy)}
+    .site-nav a{color:#fff;text-decoration:none;font-size:13px;font-weight:700;padding:9px 11px;border-radius:8px}
+    .site-nav a:hover,.site-nav a:focus{background:var(--teal)}
+    .hero{padding:65px 7% 54px;background:linear-gradient(135deg,#e0f1e9,#d8eeee)}
+    .eyebrow,.tag{color:var(--teal);font-size:11px;font-weight:800;letter-spacing:2px}
+    h1{font-size:clamp(38px,8vw,68px);line-height:1.08;max-width:720px;margin:15px 0}
+    .hero p{max-width:580px;font-size:17px;line-height:1.7}
+    .btn{display:inline-block;text-decoration:none;transition:transform .18s,opacity .18s}
+    .btn:hover{transform:translateY(-1px)}
+    .btn-primary{background:var(--teal);color:#fff}
+    .btn-dark{background:var(--navy);color:#fff}
+    .btn-coral{background:#e87856;color:#fff}
+    .btn-light{display:inline-block}
+    main{padding:38px 6%}
+    section.content-section{padding:24px 0 34px}
+    .section-title{font-size:clamp(25px,4vw,32px);margin:0 0 10px}
+    .intro{color:var(--muted);line-height:1.7;margin-top:0}
+    .features,.destination-grid,.tool-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:17px;margin-top:22px}
+    .feature,.destination-card,.panel,.tool-card{background:#fff;border:1px solid #e6e9e3;border-radius:18px;box-shadow:0 5px 16px rgba(18,48,71,.05);overflow:hidden}
+    .feature{padding:22px;transition:transform .2s,box-shadow .2s}
+    .feature:hover,.destination-card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+    .emoji{font-size:30px;margin-bottom:10px}
+    .feature h3,.destination-info h3{margin:8px 0}
+    .feature p,.destination-info p{font-size:14px;color:var(--muted);line-height:1.65}
+    .feature a,.destination-info a{font-weight:700;text-decoration:none}
+    .feature a:hover,.destination-info a:hover{text-decoration:underline}
+    .destination-controls{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0}
+    .filter{background:#fff;color:var(--navy);border:1px solid var(--line);border-radius:28px}
+    .filter.active,.filter:hover{background:var(--teal);border-color:var(--teal);color:#fff}
+    .search-input{width:100%;max-width:440px;padding:13px 14px;border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--navy)}
+    .destination-card[hidden]{display:none}
+    .destination-card img{display:block;width:100%;height:185px;object-fit:cover;background:var(--soft)}
+    .destination-info{padding:17px}
+    .destination-info p{min-height:64px}
+    .destination-meta{font-size:13px;color:var(--muted);margin:12px 0}
+    .destination-card .destination-info{display:flex;flex-direction:column;align-items:flex-start}
+    .destination-details{width:100%;margin:8px 0 12px;padding:12px;background:#f7faf8;border-radius:12px;font-size:13px;line-height:1.6}
+    .destination-details strong{color:var(--navy)}
+    .destination-actions{display:flex;gap:8px;flex-wrap:wrap;width:100%;margin-top:auto}
+    .destination-actions .btn{font-size:12px;padding:10px 11px;text-align:center;flex:1 1 110px}
+    .destination-card img{color:var(--muted)}
+    .planner-banner{padding:26px;border-radius:20px;background:var(--navy);color:#fff;margin-top:20px}
+    .planner-banner p{line-height:1.7;color:#e4eeee}
+    .panel{padding:23px}
+    .panel h3{margin-top:0}
+    .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+    .field{min-width:0}
+    .field label{display:block;margin-bottom:7px;font-size:13px;font-weight:700}
+    .field input,.field select,.field textarea{width:100%;min-width:0;padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--navy)}
+    .field textarea{min-height:90px;resize:vertical}
+    .field small{display:block;color:var(--muted);margin-top:5px;line-height:1.5}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:17px}
+    .actions .btn{flex:1 1 150px;text-align:center}
+    .note{font-size:12px;line-height:1.6;color:var(--muted);margin-bottom:0}
+    .status{margin-top:13px;padding:12px 14px;border-radius:10px;background:#edf7f3;color:#174b4b;line-height:1.55;font-size:14px}
+    .status:empty{display:none}
+    .result-list{display:grid;gap:10px;margin-top:14px}
+    .result-item{padding:13px;border:1px solid var(--line);border-radius:12px;background:#fbfcfa}
+    .result-item strong{display:block;margin-bottom:5px}
+    .result-item p{margin:0;color:var(--muted);font-size:14px;line-height:1.55}
+    .budget-total{font-size:clamp(28px,5vw,40px);font-weight:800;color:var(--teal);margin:8px 0}
+    .two-col{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+    .weather-main{display:flex;align-items:center;gap:16px;margin:15px 0}
+    .weather-icon{font-size:48px}
+    .weather-temp{font-size:34px;font-weight:800}
+    .small-muted{font-size:13px;color:var(--muted);line-height:1.55}
+    .footer{padding:26px 6%;text-align:center;color:var(--muted);font-size:13px}
+    .hidden{display:none!important}
+    .saved-section{margin-top:18px}.saved-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:14px}
+    .saved-card{background:#fbfcfa;border:1px solid var(--line);border-radius:13px;padding:15px;overflow-wrap:anywhere}
+    .saved-card h3{font-size:16px;margin:0 0 8px}.saved-card p{font-size:13px;line-height:1.6;color:var(--muted);white-space:pre-wrap}
+    .safety-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:13px;margin-top:18px}
+    .safety-item{background:#fff;border:1px solid var(--line);border-radius:14px;padding:17px;line-height:1.6}
+    .destination-actions .save-btn{background:#fff;border:1px solid var(--line);color:var(--navy)}
+    @media(max-width:600px){
+      .topbar{padding:14px 4%}.site-nav{padding:10px 4%;gap:4px}.site-nav a{font-size:12px;padding:8px}
+      .hero{padding:45px 5% 40px}main{padding:25px 4%}.form-grid,.two-col{grid-template-columns:1fr}
+      .panel{padding:18px}.destination-grid{grid-template-columns:1fr}.destination-card img{height:210px}
+      .actions{flex-direction:column}.actions .btn{width:100%}.feature{padding:19px}
     }
 
-    .primary {
-      display: inline-block;
-      background: var(--teal);
-      color: white;
-      margin: 12px 8px 0 0;
-    }
-
-    .secondary {
-      display: inline-block;
-      margin-top: 12px;
-    }
-
-    main { padding: 42px 6%; }
-
-    .section-title {
-      font-size: 28px;
-      margin-bottom: 10px;
-    }
-
-    .intro {
-      color: #526873;
-      line-height: 1.7;
-    }
-
-    .features {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 16px;
-      margin-top: 24px;
-    }
-
-    
-.feature {
-  background: white;
-  border-radius: 18px;
-  padding: 23px;
-  border: 1px solid #e6e9e3;
-  box-shadow: 0 5px 16px rgba(18, 48, 71, 0.05);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-.feature:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 24px rgba(18, 48, 71, 0.12);
-  border-color: var(--teal);
-}
-
-.feature .emoji {
-  font-size: 30px;
-  margin-bottom: 12px;
-}
-
-.feature h3 {
-  margin-bottom: 8px;
-}
-
-.feature p {
-  color: #526873;
-  line-height: 1.6;
-  font-size: 14px;
-}
-
-.feature a {
-  display: inline-block;
-  margin-top: 8px;
-  color: var(--teal);
-  font-weight: 700;
-  text-decoration: none;
-}
-
-.feature a:hover {
-  text-decoration: underline;
-}
-    
-
-    .planner {
-      margin-top: 36px;
-      padding: 26px;
-      border-radius: 20px;
-      background: var(--navy);
-      color: white;
-    }
-
-    .planner p { line-height: 1.7; }
-
-    footer {
-      padding: 25px;
-      text-align: center;
-      color: #526873;
-      font-size: 13px;
-    }
-    
-
-.booking-hub {
-  margin: 28px 6%;
-  padding: 28px 22px;
-  border-radius: 20px;
-  background: #f7f6f0;
-  color: var(--navy);
-}
-
-.booking-heading {
-  margin-bottom: 22px;
-}
-
-.booking-eyebrow {
-  color: var(--teal);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 2px;
-}
-
-.booking-heading h2 {
-  margin: 10px 0;
-  font-size: clamp(24px, 5vw, 34px);
-}
-
-.booking-heading p {
-  color: #526873;
-  line-height: 1.6;
-  margin-bottom: 0;
-}
-
-.booking-panel {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px 16px;
-  padding: 0;
-  background: transparent;
-  box-shadow: none;
-}
-
-.booking-field {
-  min-width: 0;
-}
-
-.booking-field label {
-  display: block;
-  margin-bottom: 8px;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.booking-field input {
-  width: 100%;
-  min-width: 0;
-  padding: 13px;
-  border: 1px solid #d8e2df;
-  border-radius: 10px;
-  background: #fff;
-  color: var(--navy);
-  font: inherit;
-}
-
-.booking-field input:focus {
-  outline: 2px solid var(--teal);
-  border-color: var(--teal);
-}
-
-.booking-actions {
-  grid-column: 1 / -1;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 8px;
-}
-
-.booking-actions button {
-  flex: 1 1 145px;
-  padding: 14px 12px;
-  border: 0;
-  border-radius: 10px;
-  color: white;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.booking-actions button:hover {
-  opacity: 0.88;
-}
-
-.flight-btn {
-  background: var(--teal);
-}
-
-.hotel-btn {
-  background: var(--navy);
-}
-
-.transport-btn {
-  background: #e87856;
-}
-
-.booking-note {
-  grid-column: 1 / -1;
-  margin: 0;
-  color: #526873;
-  font-size: 12px;
-  line-height: 1.6;
-}
-
-@media (max-width: 520px) {
-  .booking-hub {
-    margin: 22px 4%;
-    padding: 22px 16px;
-  }
-
-  .booking-panel {
-    grid-template-columns: 1fr;
-    gap: 15px;
-  }
-
-  .booking-actions {
-    grid-column: 1;
-    flex-direction: column;
-  }
-
-  .booking-actions button {
-    flex: auto;
-    width: 100%;
-  }
-
-  .booking-note {
-    grid-column: 1;
-  }
-}
-
-/* Explore Destinations */
-.destinations-section {
-  padding: 42px 6%;
-  background: var(--cream);
-}
-
-.destinations-heading {
-  margin-bottom: 22px;
-}
-
-.destination-filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 24px;
-}
-
-.destination-filter {
-  padding: 10px 17px;
-  border: 1px solid #d8e2df;
-  border-radius: 30px;
-  background: white;
-  color: var(--navy);
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.destination-filter:hover,
-.destination-filter.active {
-  background: var(--teal);
-  border-color: var(--teal);
-  color: white;
-}
-
-.destination-grid {
-  display: grid;
-  grid-template-columns: repeat(
-    auto-fit, minmax(220px, 1fr)
-  );
-  gap: 20px;
-}
-
-.destination-card {
-  min-width: 0;
-  overflow: hidden;
-  background: white;
-  border: 1px solid #e6e9e3;
-  border-radius: 18px;
-  box-shadow: 0 5px 16px rgba(18, 48, 71, 0.06);
-  transition: transform 0.25s ease,
-    box-shadow 0.25s ease;
-}
-
-.destination-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 24px rgba(18, 48, 71, 0.12);
-}
-
-.destination-card[hidden] {
-  display: none;
-}
-
-.destination-card img {
-  display: block;
-  width: 100%;
-  height: 190px;
-  object-fit: cover;
-  background: #e0f1e9;
-}
-
-.destination-info {
-  padding: 18px;
-}
-
-.destination-tag {
-  color: var(--teal);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 1.5px;
-}
-
-.destination-info h3 {
-  margin: 10px 0;
-  font-size: 19px;
-}
-
-.destination-info p {
-  min-height: 66px;
-  color: #526873;
-  font-size: 14px;
-  line-height: 1.6;
-}
-
-.destination-info a {
-  display: inline-block;
-  margin-top: 8px;
-  color: var(--teal);
-  font-size: 14px;
-  font-weight: 700;
-  text-decoration: none;
-}
-
-.destination-info a:hover {
-  text-decoration: underline;
-}
-
-@media (max-width: 520px) {
-  .destinations-section {
-    padding: 30px 4%;
-  }
-
-  .destination-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .destination-card img {
-    height: 210px;
-  }
-}
-     
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important}}
   </style>
 </head>
 <body>
-  <header>
-    <div class="brand">🌍 GlobeTrip</div>
-    <button class="language" id="languageButton"
-      onclick="toggleLanguage()">EN</button>
+  <header class="topbar">
+    <a class="brand" href="#home">🌍 GlobeTrip</a>
+    <button class="language" id="languageButton" type="button" onclick="toggleLanguage()">EN</button>
   </header>
 
-    <nav class="site-nav">
-    <a href="#home" id="navHome">Home</a>
-    <a href="#features" id="navFeatures">Features</a>
-    <a href="#booking-hub" id="navBooking">Booking</a>
-    <a href="#maps-tool" id="navMaps">Maps</a>
-    <a href="#planner" id="navPlanner">Planner</a>
+  <nav class="site-nav" aria-label="Main navigation">
+    <a href="#home" data-i18n="navHome">Beranda</a>
+    <a href="#features" data-i18n="navFeatures">Fitur</a>
+    <a href="#destinations" data-i18n="navDestinations">Destinasi</a>
+    <a href="#saved-trips" data-i18n="navSaved">Favorit & Simpanan</a>
+    <a href="#booking-hub" data-i18n="navBooking">Pemesanan</a>
+    <a href="#maps-tool" data-i18n="navMaps">Peta</a>
+    <a href="#weather-tool" data-i18n="navWeather">Cuaca</a>
+    <a href="#planner" data-i18n="navPlanner">Itinerary</a>
+    <a href="#budget-tool" data-i18n="navBudget">Anggaran</a>
+    <a href="#travel-safety" data-i18n="navSafety">Tips Aman</a>
   </nav>
 
   <section class="hero" id="home">
-    <div class="eyebrow" id="eyebrow">EXPLORE THE WORLD</div>
-    <h1 id="headline">Your journey, your way.</h1>
-    <p id="description">
-      Rencanakan perjalanan impianmu, temukan destinasi menarik,
-      dan atur anggaran liburan dalam satu tempat.
-    </p>
-    <a href="#planner" class="primary" id="startButton">
-      Mulai perjalanan →
-    </a>
-    <a href="#features" class="secondary" id="exploreButton">
-      Jelajahi fitur
-    </a>
+    <div class="eyebrow" data-i18n="eyebrow">JELAJAHI DUNIA</div>
+    <h1 data-i18n="headline">Your journey, your way.</h1>
+    <p data-i18n="description">Rencanakan perjalanan impianmu, temukan destinasi menarik, dan atur anggaran liburan dalam satu tempat.</p>
+    <a href="#planner" class="btn btn-primary" data-i18n="startButton">Mulai perjalanan →</a>
+    <a href="#features" class="btn btn-light" data-i18n="exploreButton">Jelajahi fitur</a>
   </section>
 
   <main>
-    <section id="features">
-      <h2 class="section-title" id="featuresTitle">Satu tempat, banyak kemungkinan.</h2>
-      <p class="intro" id="featuresIntro">
-        Semua yang kamu butuhkan untuk menyusun perjalanan dengan lebih teratur.
-      </p>
-
+    <section class="content-section" id="features">
+      <h2 class="section-title" data-i18n="featuresTitle">Satu tempat, banyak kemungkinan.</h2>
+      <p class="intro" data-i18n="featuresIntro">Semua yang kamu butuhkan untuk menyusun perjalanan dengan lebih teratur.</p>
       <div class="features">
-        <article class="feature">
-          <div class="emoji">🗓️</div>
-          <h3 id="f1">Smart Trip Planner</h3>
-          <p id="d1">Susun rencana kegiatan berdasarkan tujuan dan minatmu.</p>
-        </article>
-        <article class="feature">
-          <div class="emoji">🗺️</div>
-          <h3 id="f2">Maps & Routes</h3>
-          <p id="d2">Temukan lokasi wisata dan buka petunjuk arah di Google Maps.</p>
-          <a href="https://maps.google.com/" target="_blank" rel="noopener"
-            id="mapLink">Buka Google Maps ↗</a>
-        </article>
-        <article class="feature">
-          <div class="emoji">🌦️</div>
-          <h3 id="f3">Weather Preview</h3>
-          <p id="d3">Persiapkan perjalanan dengan memeriksa prakiraan cuaca.</p>
-        </article>
-        <article class="feature">
-          <div class="emoji">💰</div>
-          <h3 id="f4">Budget Planner</h3>
-          <p id="d4">Rencanakan pengeluaran untuk transportasi, hotel, dan aktivitas.</p>
-        </article>
+        <article class="feature"><div class="emoji">🗓️</div><h3 data-i18n="f1">Smart Trip Planner</h3><p data-i18n="d1">Susun rencana kegiatan berdasarkan tujuan dan minatmu.</p><a href="#planner" data-i18n="openPlanner">Buat itinerary →</a></article>
+        <article class="feature"><div class="emoji">🗺️</div><h3 data-i18n="f2">Maps & Routes</h3><p data-i18n="d2">Temukan lokasi wisata dan buka petunjuk arah di Google Maps.</p><a href="#maps-tool" data-i18n="openMaps">Buka peta →</a></article>
+        <article class="feature"><div class="emoji">🌦️</div><h3 data-i18n="f3">Weather Preview</h3><p data-i18n="d3">Periksa prakiraan cuaca sebelum berangkat.</p><a href="#weather-tool" data-i18n="openWeather">Periksa cuaca →</a></article>
+        <article class="feature"><div class="emoji">💰</div><h3 data-i18n="f4">Budget Planner</h3><p data-i18n="d4">Hitung perkiraan pengeluaran untuk transportasi, hotel, makanan, dan aktivitas.</p><a href="#budget-tool" data-i18n="openBudget">Atur anggaran →</a></article>
       </div>
     </section>
-    
-<section id="destinations" class="destinations-section">
-  <div class="destinations-heading">
-    <span class="booking-eyebrow">FIND YOUR NEXT ESCAPE</span>
-    <h2 class="section-title">Explore Destinations 🌍</h2>
-    <p class="intro">
-      Discover beautiful places and find the journey
-      that matches your travel style.
-    </p>
-  </div>
 
-  <div class="destination-filters">
-    <button type="button" class="destination-filter active"
-      onclick="filterDestinations('all', this)">All</button>
-    <button type="button" class="destination-filter"
-      onclick="filterDestinations('nature', this)">Nature</button>
-    <button type="button" class="destination-filter"
-      onclick="filterDestinations('culture', this)">Culture</button>
-    <button type="button" class="destination-filter"
-      onclick="filterDestinations('city', this)">City</button>
-  </div>
-
-  <div class="destination-grid">
-    <article class="destination-card" data-category="nature">
-      <img
-        src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=800&q=80"
-        alt="Pemandangan tropis Bali" loading="lazy">
-      <div class="destination-info">
-        <span class="destination-tag">NATURE</span>
-        <h3>Bali, Indonesia</h3>
-        <p>Tropical beaches, green rice terraces, and peaceful escapes.</p>
-        <a href="https://www.google.com/maps/search/?api=1&query=Bali%2C+Indonesia"
-          target="_blank" rel="noopener">Explore destination ↗</a>
+    <section class="content-section" id="destinations">
+      <span class="eyebrow" data-i18n="destinationEyebrow">TEMUKAN LIBURAN BERIKUTNYA</span>
+      <h2 class="section-title" data-i18n="destinationTitle">Jelajahi Destinasi 🌍</h2>
+      <p class="intro" data-i18n="destinationIntro">Temukan tempat menarik yang sesuai dengan gaya perjalananmu.</p>
+      <input class="search-input" id="destinationSearch" type="search" placeholder="Cari destinasi..." data-i18n-placeholder="destinationSearchPlaceholder" oninput="filterDestinations()">
+      <div class="destination-controls" aria-label="Destination categories">
+        <button type="button" class="filter active" data-category="all" onclick="setDestinationFilter('all',this)" data-i18n="all">Semua</button>
+        <button type="button" class="filter" data-category="nature" onclick="setDestinationFilter('nature',this)" data-i18n="nature">Alam</button>
+        <button type="button" class="filter" data-category="culture" onclick="setDestinationFilter('culture',this)" data-i18n="culture">Budaya</button>
+        <button type="button" class="filter" data-category="city" onclick="setDestinationFilter('city',this)" data-i18n="city">Kota</button>
+        <button type="button" class="filter" data-category="beach" onclick="setDestinationFilter('beach',this)" data-i18n="beach">Pantai & Pulau</button>
+        <button type="button" class="filter" data-category="adventure" onclick="setDestinationFilter('adventure',this)" data-i18n="adventure">Petualangan</button>
+        <button type="button" class="filter" data-category="food" onclick="setDestinationFilter('food',this)" data-i18n="food">Kuliner</button>
       </div>
-    </article>
+      <div class="destination-meta" id="destinationCount" aria-live="polite"></div>
+      <div class="destination-grid" id="destinationGrid"></div>
+      <p class="note" id="destinationEmpty" hidden data-i18n="noDestination">Tidak ada destinasi yang cocok dengan pencarianmu.</p>
+    </section>
 
-    <article class="destination-card" data-category="culture">
-      <img
-        src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=800&q=80"
-        alt="Jalanan tradisional Kyoto" loading="lazy">
-      <div class="destination-info">
-        <span class="destination-tag">CULTURE</span>
-        <h3>Kyoto, Japan</h3>
-        <p>Discover traditional streets, temples, and Japanese culture.</p>
-        <a href="https://www.google.com/maps/search/?api=1&query=Kyoto%2C+Japan"
-          target="_blank" rel="noopener">Explore destination ↗</a>
+    <section class="content-section" id="saved-trips">
+      <div class="panel saved-section">
+        <span class="eyebrow" data-i18n="savedEyebrow">YOUR TRAVEL COLLECTION</span>
+        <h2 class="section-title" data-i18n="savedTitle">Favorit & Perjalanan Tersimpan ❤️</h2>
+        <p class="intro" data-i18n="savedIntro">Simpan destinasi favorit dan draf itinerary di perangkat ini agar mudah dibuka lagi.</p>
+        <h3 data-i18n="favoriteDestinations">Destinasi favorit</h3>
+        <div id="wishlistGrid" class="saved-grid"></div>
+        <p id="wishlistEmpty" class="note" data-i18n="wishlistEmpty">Belum ada destinasi favorit. Tekan tombol ♡ pada kartu destinasi.</p>
+        <h3 style="margin-top:24px" data-i18n="savedItineraries">Itinerary tersimpan</h3>
+        <div id="savedTripsGrid" class="saved-grid"></div>
+        <p id="savedTripsEmpty" class="note" data-i18n="savedTripsEmpty">Belum ada itinerary tersimpan.</p>
+        <p class="note" data-i18n="savedNote">Simpanan berada di browser perangkat ini. Menghapus data browser dapat menghapus simpanan; belum tersinkron ke akun atau perangkat lain.</p>
       </div>
-    </article>
+    </section>
 
-    <article class="destination-card" data-category="nature">
-      <img
-        src="https://images.unsplash.com/photo-1531366936337-7c912a4589a7?auto=format&fit=crop&w=800&q=80"
-        alt="Pegunungan dan pemandangan alam" loading="lazy">
-      <div class="destination-info">
-        <span class="destination-tag">NATURE</span>
-        <h3>Swiss Alps, Switzerland</h3>
-        <p>Enjoy majestic mountains, alpine lakes, and scenic views.</p>
-        <a href="https://www.google.com/maps/search/?api=1&query=Swiss+Alps"
-          target="_blank" rel="noopener">Explore destination ↗</a>
+    <section class="content-section" id="booking-hub">
+      <div class="panel">
+        <span class="eyebrow" data-i18n="bookingEyebrow">PETUALANGAN BERIKUTNYA</span>
+        <h2 class="section-title">✈️ Travel Booking Hub</h2>
+        <p class="intro" data-i18n="bookingIntro">Cari pilihan penerbangan, hotel, dan transportasi untuk perjalananmu.</p>
+        <div class="form-grid">
+          <div class="field"><label for="booking-from" data-i18n="departureCity">📍 Kota keberangkatan</label><input id="booking-from" type="text" placeholder="Contoh: Wakatobi, Indonesia" data-i18n-placeholder="departurePlaceholder"></div>
+          <div class="field"><label for="booking-to" data-i18n="destination">🌍 Destinasi</label><input id="booking-to" type="text" placeholder="Contoh: Bali, Indonesia" data-i18n-placeholder="destinationPlaceholder"></div>
+          <div class="field"><label for="booking-depart" data-i18n="departDate">🗓️ Tanggal berangkat</label><input id="booking-depart" type="date"></div>
+          <div class="field"><label for="booking-return" data-i18n="returnDate">🗓️ Tanggal pulang (opsional)</label><input id="booking-return" type="date"></div>
+          <div class="field"><label for="booking-guests" data-i18n="travelers">👥 Jumlah pelancong</label><input id="booking-guests" type="number" min="1" max="20" value="1"></div>
+          <div class="field"><label for="booking-room" data-i18n="hotelRooms">🏨 Jumlah kamar hotel</label><input id="booking-room" type="number" min="1" max="10" value="1"></div>
+        </div>
+        <div class="actions">
+          <button type="button" class="btn btn-primary" onclick="gtSearchFlights()" data-i18n="searchFlights">✈️ Cari penerbangan</button>
+          <button type="button" class="btn btn-dark" onclick="gtSearchHotels()" data-i18n="findHotels">🏨 Cari hotel</button>
+          <button type="button" class="btn btn-coral" onclick="gtSearchTransport()" data-i18n="findTransport">🚆 Cari transportasi</button>
+        </div>
+        <p class="note" data-i18n="bookingNote">Pencarian dibuka melalui layanan eksternal. Harga dan ketersediaan dapat berubah. GlobeTrip tidak menjual tiket atau mengonfirmasi pemesanan secara langsung.</p>
+        <div class="status" id="bookingStatus" role="status" aria-live="polite"></div>
       </div>
-    </article>
+    </section>
 
-    <article class="destination-card" data-category="nature">
-      <img
-        src="https://images.unsplash.com/photo-1516690561799-46d8f74f9abf?auto=format&fit=crop&w=800&q=80"
-        alt="Pulau dan laut tropis" loading="lazy">
-      <div class="destination-info">
-        <span class="destination-tag">NATURE</span>
-        <h3>Raja Ampat, Indonesia</h3>
-        <p>Explore turquoise waters, tropical islands, and marine life.</p>
-        <a href="https://www.google.com/maps/search/?api=1&query=Raja+Ampat%2C+Indonesia"
-          target="_blank" rel="noopener">Explore destination ↗</a>
+    <section class="content-section" id="maps-tool">
+      <div class="panel">
+        <span class="eyebrow">MAPS & ROUTES</span>
+        <h2 class="section-title" data-i18n="mapsTitle">Temukan lokasi dan rute 🗺️</h2>
+        <p class="intro" data-i18n="mapsIntro">Masukkan lokasi tujuan dan, jika perlu, titik awal untuk membuka petunjuk arah di Google Maps.</p>
+        <div class="form-grid">
+          <div class="field"><label for="map-destination" data-i18n="mapDestination">Destinasi</label><input id="map-destination" type="text" placeholder="Contoh: Pantai di Bali" data-i18n-placeholder="mapDestinationPlaceholder"></div>
+          <div class="field"><label for="map-origin" data-i18n="mapOrigin">Titik awal (opsional)</label><input id="map-origin" type="text" placeholder="Contoh: Wakatobi, Indonesia" data-i18n-placeholder="departurePlaceholder"></div>
+          <div class="field"><label for="map-mode" data-i18n="travelMode">Moda perjalanan</label><select id="map-mode"><option value="driving" data-i18n="car">Mobil</option><option value="walking" data-i18n="walking">Jalan kaki</option><option value="bicycling" data-i18n="bicycle">Sepeda</option><option value="transit" data-i18n="publicTransport">Transportasi umum</option></select></div>
+        </div>
+        <div class="actions">
+          <button class="btn btn-primary" type="button" onclick="globeTripSearch()" data-i18n="searchDestination">Cari destinasi</button>
+          <button class="btn btn-dark" type="button" onclick="globeTripDirections()" data-i18n="getDirections">Dapatkan petunjuk arah</button>
+        </div>
+        <p class="note" data-i18n="mapsNote">Hasil peta dan rute akan terbuka di Google Maps.</p>
+        <div class="status" id="mapsStatus" role="status" aria-live="polite"></div>
       </div>
-    </article>
+    </section>
 
-    <article class="destination-card" data-category="city">
-      <img
-        src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=800&q=80"
-        alt="Pemandangan kota New York" loading="lazy">
-      <div class="destination-info">
-        <span class="destination-tag">CITY</span>
-        <h3>New York, USA</h3>
-        <p>Experience iconic landmarks, city lights, and urban adventures.</p>
-        <a href="https://www.google.com/maps/search/?api=1&query=New+York+City"
-          target="_blank" rel="noopener">Explore destination ↗</a>
+    <section class="content-section" id="weather-tool">
+      <div class="panel">
+        <span class="eyebrow">WEATHER PREVIEW</span>
+        <h2 class="section-title" data-i18n="weatherTitle">Periksa cuaca destinasi 🌦️</h2>
+        <p class="intro" data-i18n="weatherIntro">Masukkan nama kota untuk melihat kondisi dan prakiraan cuaca. Fitur ini memerlukan koneksi internet.</p>
+        <div class="form-grid">
+          <div class="field"><label for="weather-city" data-i18n="weatherCity">Kota atau destinasi</label><input id="weather-city" type="text" placeholder="Contoh: Kyoto, Japan" data-i18n-placeholder="weatherPlaceholder"></div>
+        </div>
+        <div class="actions"><button type="button" class="btn btn-primary" onclick="getWeather()" data-i18n="checkWeather">Periksa cuaca</button></div>
+        <div class="status" id="weatherStatus" role="status" aria-live="polite"></div>
+        <div id="weatherResult" class="result-list"></div>
+        <p class="note" data-i18n="weatherNote">Data cuaca disediakan oleh Open-Meteo dan dapat berubah. Periksa sumber cuaca resmi untuk keputusan penting.</p>
       </div>
-    </article>
+    </section>
 
-    <article class="destination-card" data-category="culture">
-      <img
-        src="https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=800&q=80"
-        alt="Bangunan bersejarah di India" loading="lazy">
-      <div class="destination-info">
-        <span class="destination-tag">CULTURE</span>
-        <h3>Agra, India</h3>
-        <p>Discover historic architecture and remarkable cultural heritage.</p>
-        <a href="https://www.google.com/maps/search/?api=1&query=Agra%2C+India"
-          target="_blank" rel="noopener">Explore destination ↗</a>
+    <section class="content-section" id="planner">
+      <div class="panel">
+        <span class="eyebrow">SMART TRIP PLANNER</span>
+        <h2 class="section-title" data-i18n="plannerTitle">Susun itinerary perjalananmu 🗓️</h2>
+        <p class="intro" data-i18n="plannerIntro">Buat draf rencana harian berdasarkan destinasi, durasi, dan minatmu. Kamu bisa menyalin hasilnya.</p>
+        <div class="form-grid">
+          <div class="field"><label for="itinerary-destination" data-i18n="itineraryDestination">Destinasi perjalanan</label><input id="itinerary-destination" type="text" placeholder="Contoh: Bali, Indonesia" data-i18n-placeholder="destinationPlaceholder"></div>
+          <div class="field"><label for="itinerary-days" data-i18n="tripDuration">Lama perjalanan (hari)</label><input id="itinerary-days" type="number" min="1" max="14" value="3"></div>
+          <div class="field"><label for="itinerary-style" data-i18n="travelStyle">Gaya perjalanan</label><select id="itinerary-style"><option value="mixed" data-i18n="styleMixed">Campuran: alam, budaya, dan santai</option><option value="nature" data-i18n="styleNature">Alam dan petualangan ringan</option><option value="culture" data-i18n="styleCulture">Budaya dan sejarah</option><option value="relax" data-i18n="styleRelax">Santai dan kuliner</option></select></div>
+          <div class="field"><label for="itinerary-notes" data-i18n="extraInterests">Minat tambahan (opsional)</label><input id="itinerary-notes" type="text" placeholder="Contoh: pantai, museum, makanan lokal" data-i18n-placeholder="interestPlaceholder"></div>
+        </div>
+        <div class="actions">
+          <button type="button" class="btn btn-primary" onclick="buildItinerary()" data-i18n="makeItinerary">Buat itinerary</button>
+          <button type="button" class="btn btn-light" onclick="copyItinerary()" data-i18n="copyItinerary">Salin itinerary</button>
+          <button type="button" class="btn btn-coral" onclick="saveItinerary()" data-i18n="saveItinerary">Simpan itinerary</button>
+        </div>
+        <div class="status" id="plannerStatus" role="status" aria-live="polite"></div>
+        <div class="result-list" id="itineraryResult"></div>
+        <p class="note" data-i18n="plannerNote">Itinerary ini adalah draf ide otomatis, bukan reservasi. Periksa jam buka, jarak, keselamatan, dan kondisi lokal sebelum berangkat.</p>
       </div>
-    </article>
-  </div>
-</section>
+    </section>
 
-    <section class="planner" id="planner">
-      <h2 id="plannerTitle">Petualanganmu dimulai di sini.</h2>
-      <p id="plannerDescription">
-        GlobeTrip sedang dibangun. Fitur pembuat itinerary,
-        perkiraan cuaca, dan estimasi harga akan ditambahkan bertahap.
-      </p>
-      <a class="primary" href="https://maps.google.com/"
-        target="_blank" rel="noopener" id="plannerButton">
-        Cari destinasi →
-      </a>
+    <section class="content-section" id="budget-tool">
+      <div class="panel">
+        <span class="eyebrow">BUDGET PLANNER</span>
+        <h2 class="section-title" data-i18n="budgetTitle">Hitung anggaran liburan 💰</h2>
+        <p class="intro" data-i18n="budgetIntro">Masukkan perkiraan biaya untuk melihat total dan biaya per orang. Nilai dihitung sesuai mata uang yang kamu pilih.</p>
+        <div class="form-grid">
+          <div class="field"><label for="budget-currency" data-i18n="currency">Mata uang</label><select id="budget-currency"><option value="IDR">IDR — Rupiah</option><option value="USD">USD — US Dollar</option><option value="SGD">SGD — Singapore Dollar</option><option value="JPY">JPY — Japanese Yen</option><option value="MYR">MYR — Malaysian Ringgit</option></select></div>
+          <div class="field"><label for="budget-people" data-i18n="budgetPeople">Jumlah orang</label><input id="budget-people" type="number" min="1" max="100" value="1"></div>
+          <div class="field"><label for="budget-days" data-i18n="budgetDays">Durasi (hari)</label><input id="budget-days" type="number" min="1" max="365" value="3"></div>
+          <div class="field"><label for="budget-transport" data-i18n="costTransport">Transportasi</label><input id="budget-transport" type="number" min="0" step="any" value="0"></div>
+          <div class="field"><label for="budget-stay" data-i18n="costStay">Penginapan</label><input id="budget-stay" type="number" min="0" step="any" value="0"></div>
+          <div class="field"><label for="budget-food" data-i18n="costFood">Makanan dan minuman</label><input id="budget-food" type="number" min="0" step="any" value="0"></div>
+          <div class="field"><label for="budget-activities" data-i18n="costActivities">Tiket dan aktivitas</label><input id="budget-activities" type="number" min="0" step="any" value="0"></div>
+          <div class="field"><label for="budget-extra" data-i18n="costExtra">Biaya lain-lain</label><input id="budget-extra" type="number" min="0" step="any" value="0"></div>
+        </div>
+        <div class="actions"><button type="button" class="btn btn-primary" onclick="calculateBudget()" data-i18n="calculateBudget">Hitung anggaran</button><button type="button" class="btn btn-light" onclick="resetBudget()" data-i18n="resetBudget">Atur ulang</button></div>
+        <div class="result-item" style="margin-top:16px">
+          <div class="small-muted" data-i18n="estimatedTotal">Total perkiraan biaya</div>
+          <div class="budget-total" id="budgetTotal">Rp0</div>
+          <p id="budgetPerPerson" class="small-muted">Per orang: Rp0</p>
+          <p id="budgetPerDay" class="small-muted">Per orang per hari: Rp0</p>
+        </div>
+        <p class="note" data-i18n="budgetNote">Ini kalkulator manual, bukan harga pasar langsung. Masukkan semua biaya dengan mata uang yang sama.</p>
+      </div>
+    </section>
+
+    <section class="content-section" id="travel-safety">
+      <div class="panel">
+        <span class="eyebrow">TRAVEL SMART</span>
+        <h2 class="section-title" data-i18n="safetyTitle">Tips perjalanan yang lebih aman 🧭</h2>
+        <p class="intro" data-i18n="safetyIntro">Persiapan sederhana dapat membantu perjalanan lebih nyaman. Sesuaikan selalu dengan aturan dan kondisi lokal.</p>
+        <div class="safety-list">
+          <article class="safety-item"><strong data-i18n="safety1Title">📄 Dokumen dan kontak</strong><p data-i18n="safety1">Simpan salinan dokumen penting secara aman, bagikan rencana perjalanan kepada orang tepercaya, dan catat kontak darurat lokal.</p></article>
+          <article class="safety-item"><strong data-i18n="safety2Title">🌦️ Cek kondisi setempat</strong><p data-i18n="safety2">Periksa cuaca, peringatan perjalanan, jam buka, dan aturan tempat sebelum berangkat.</p></article>
+          <article class="safety-item"><strong data-i18n="safety3Title">🚕 Transportasi resmi</strong><p data-i18n="safety3">Gunakan transportasi tepercaya, konfirmasi tarif bila perlu, dan periksa rute sebelum perjalanan.</p></article>
+          <article class="safety-item"><strong data-i18n="safety4Title">🤝 Hormati budaya lokal</strong><p data-i18n="safety4">Pelajari kebiasaan setempat, aturan berpakaian di tempat tertentu, serta panduan menjaga alam dan satwa.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <div class="planner-banner">
+        <h2 data-i18n="closingTitle">Petualanganmu dimulai di sini.</h2>
+        <p data-i18n="closingDescription">Rencanakan, jelajahi, dan siapkan perjalananmu dengan GlobeTrip.</p>
+        <a class="btn btn-primary" href="#destinations" data-i18n="closingButton">Cari destinasi →</a>
+      </div>
     </section>
   </main>
 
-  <footer id="footer">
-    © 2026 GlobeTrip · Your Journey, Your Way.
-  </footer>
+  <footer class="footer" id="footer" data-i18n="footer">© 2026 GlobeTrip · Your Journey, Your Way.</footer>
 
   <script>
     let language = "id";
+    let activeDestinationCategory = "all";
+    let latestItineraryText = "";
 
     const translations = {
-      en: {
-        eyebrow: "EXPLORE THE WORLD",
-        headline: "Your journey, your way.",
-        description: "Plan your dream trip, discover amazing destinations, and organize your travel budget in one place.",
-        startButton: "Plan my trip →",
-        exploreButton: "Explore features",
-        featuresTitle: "One place, endless possibilities.",
-        featuresIntro: "Everything you need to organize your journey.",
-        f1: "Smart Trip Planner",
-        d1: "Plan activities based on your destination and interests.",
-        f2: "Maps & Routes",
-        d2: "Find destinations and open directions in Google Maps.",
-        mapLink: "Open Google Maps ↗",
-        f3: "Weather Preview",
-        d3: "Check the forecast before your journey.",
-        f4: "Budget Planner",
-        d4: "Plan spending for transport, hotels, and activities.",
-        plannerTitle: "Your adventure starts here.",
-        plannerDescription: "GlobeTrip is being built. Itinerary planning, weather forecasts, and price estimates will be added step by step.",
-        plannerButton: "Find destinations →",
-navHome: "Home",
-navFeatures: "Features",
-navBooking: "Booking",
-navMaps: "Maps",
-navPlanner: "Planner",
-footer: "© 2026 GlobeTrip · Your Journey, Your Way."
-      },
-      
       id: {
-        eyebrow: "JELAJAHI DUNIA",
-        headline: "Your journey, your way.",
-        description: "Rencanakan perjalanan impianmu, temukan destinasi menarik, dan atur anggaran liburan dalam satu tempat.",
-        startButton: "Mulai perjalanan →",
-        exploreButton: "Jelajahi fitur",
-        featuresTitle: "Satu tempat, banyak kemungkinan.",
-        featuresIntro: "Semua yang kamu butuhkan untuk menyusun perjalanan dengan lebih teratur.",
-        f1: "Smart Trip Planner",
-        d1: "Susun rencana kegiatan berdasarkan tujuan dan minatmu.",
-        f2: "Maps & Routes",
-        d2: "Temukan lokasi wisata dan buka petunjuk arah di Google Maps.",
-        mapLink: "Buka Google Maps ↗",
-        f3: "Weather Preview",
-        d3: "Persiapkan perjalanan dengan memeriksa prakiraan cuaca.",
-        f4: "Budget Planner",
-        d4: "Rencanakan pengeluaran untuk transportasi, hotel, dan aktivitas.",
-        plannerTitle: "Petualanganmu dimulai di sini.",
-        plannerDescription: "GlobeTrip sedang dibangun. Fitur pembuat itinerary, perkiraan cuaca, dan estimasi harga akan ditambahkan bertahap.",
-        
-        plannerButton: "Cari destinasi →",
-        navHome: "Beranda",
-        navFeatures: "Fitur",
-        navBooking: "Pemesanan",
-        navMaps: "Peta",
-        navPlanner: "Perencana",
-        footer: "© 2026 GlobeTrip · Your Journey, Your Way."
-    
+        navHome:"Beranda",navFeatures:"Fitur",navDestinations:"Destinasi",navSaved:"Favorit & Simpanan",navSafety:"Tips Aman",navBooking:"Pemesanan",navMaps:"Peta",navWeather:"Cuaca",navPlanner:"Itinerary",navBudget:"Anggaran",
+        eyebrow:"JELAJAHI DUNIA",headline:"Your journey, your way.",description:"Rencanakan perjalanan impianmu, temukan destinasi menarik, dan atur anggaran liburan dalam satu tempat.",startButton:"Mulai perjalanan →",exploreButton:"Jelajahi fitur",
+        featuresTitle:"Satu tempat, banyak kemungkinan.",featuresIntro:"Semua yang kamu butuhkan untuk menyusun perjalanan dengan lebih teratur.",f1:"Smart Trip Planner",d1:"Susun rencana kegiatan berdasarkan tujuan dan minatmu.",f2:"Maps & Routes",d2:"Temukan lokasi wisata dan buka petunjuk arah di Google Maps.",f3:"Weather Preview",d3:"Periksa prakiraan cuaca sebelum berangkat.",f4:"Budget Planner",d4:"Hitung perkiraan pengeluaran untuk transportasi, hotel, makanan, dan aktivitas.",openPlanner:"Buat itinerary →",openMaps:"Buka peta →",openWeather:"Periksa cuaca →",openBudget:"Atur anggaran →",
+        destinationEyebrow:"TEMUKAN LIBURAN BERIKUTNYA",destinationTitle:"Jelajahi Destinasi 🌍",destinationIntro:"Temukan tempat menarik yang sesuai dengan gaya perjalananmu.",destinationSearchPlaceholder:"Cari destinasi atau negara...",all:"Semua",nature:"Alam",culture:"Budaya",city:"Kota",beach:"Pantai & Pulau",adventure:"Petualangan",food:"Kuliner",baliDesc:"Pantai tropis, sawah hijau, dan tempat beristirahat yang tenang.",kyotoDesc:"Jelajahi jalan tradisional, kuil, dan budaya Jepang.",alpsDesc:"Nikmati pegunungan megah, danau alpine, dan pemandangan indah.",rajaDesc:"Jelajahi laut biru kehijauan, pulau tropis, dan kehidupan laut.",nyDesc:"Rasakan landmark ikonik, lampu kota, dan petualangan urban.",agraDesc:"Temukan arsitektur bersejarah dan warisan budaya yang mengagumkan.",exploreDestination:"Jelajahi destinasi ↗",noDestination:"Tidak ada destinasi yang cocok dengan pencarianmu.",
+        bookingEyebrow:"PETUALANGAN BERIKUTNYA",bookingIntro:"Cari pilihan penerbangan, hotel, dan transportasi untuk perjalananmu.",departureCity:"📍 Kota keberangkatan",departurePlaceholder:"Contoh: Wakatobi, Indonesia",destination:"🌍 Destinasi",destinationPlaceholder:"Contoh: Bali, Indonesia",departDate:"🗓️ Tanggal berangkat",returnDate:"🗓️ Tanggal pulang (opsional)",travelers:"👥 Jumlah pelancong",hotelRooms:"🏨 Jumlah kamar hotel",searchFlights:"✈️ Cari penerbangan",findHotels:"🏨 Cari hotel",findTransport:"🚆 Cari transportasi",bookingNote:"Pencarian dibuka melalui layanan eksternal. Harga dan ketersediaan dapat berubah. GlobeTrip tidak menjual tiket atau mengonfirmasi pemesanan secara langsung.",
+        mapsTitle:"Temukan lokasi dan rute 🗺️",mapsIntro:"Masukkan lokasi tujuan dan, jika perlu, titik awal untuk membuka petunjuk arah di Google Maps.",mapDestination:"Destinasi",mapDestinationPlaceholder:"Contoh: Pantai di Bali",mapOrigin:"Titik awal (opsional)",travelMode:"Moda perjalanan",car:"Mobil",walking:"Jalan kaki",bicycle:"Sepeda",publicTransport:"Transportasi umum",searchDestination:"Cari destinasi",getDirections:"Dapatkan petunjuk arah",mapsNote:"Hasil peta dan rute akan terbuka di Google Maps.",
+        weatherTitle:"Periksa cuaca destinasi 🌦️",weatherIntro:"Masukkan nama kota untuk melihat kondisi dan prakiraan cuaca. Fitur ini memerlukan koneksi internet.",weatherCity:"Kota atau destinasi",weatherPlaceholder:"Contoh: Kyoto, Japan",checkWeather:"Periksa cuaca",weatherNote:"Data cuaca disediakan oleh Open-Meteo dan dapat berubah. Periksa sumber cuaca resmi untuk keputusan penting.",
+        plannerTitle:"Susun itinerary perjalananmu 🗓️",plannerIntro:"Buat draf rencana harian berdasarkan destinasi, durasi, dan minatmu. Kamu bisa menyalin hasilnya.",itineraryDestination:"Destinasi perjalanan",tripDuration:"Lama perjalanan (hari)",travelStyle:"Gaya perjalanan",styleMixed:"Campuran: alam, budaya, dan santai",styleNature:"Alam dan petualangan ringan",styleCulture:"Budaya dan sejarah",styleRelax:"Santai dan kuliner",extraInterests:"Minat tambahan (opsional)",interestPlaceholder:"Contoh: pantai, museum, makanan lokal",makeItinerary:"Buat itinerary",copyItinerary:"Salin itinerary",saveItinerary:"Simpan itinerary",plannerNote:"Itinerary ini adalah draf ide otomatis, bukan reservasi. Periksa jam buka, jarak, keselamatan, dan kondisi lokal sebelum berangkat.",
+        budgetTitle:"Hitung anggaran liburan 💰",budgetIntro:"Masukkan perkiraan biaya untuk melihat total dan biaya per orang. Nilai dihitung sesuai mata uang yang kamu pilih.",currency:"Mata uang",budgetPeople:"Jumlah orang",budgetDays:"Durasi (hari)",costTransport:"Transportasi",costStay:"Penginapan",costFood:"Makanan dan minuman",costActivities:"Tiket dan aktivitas",costExtra:"Biaya lain-lain",calculateBudget:"Hitung anggaran",resetBudget:"Atur ulang",estimatedTotal:"Total perkiraan biaya",budgetNote:"Ini kalkulator manual, bukan harga pasar langsung. Masukkan semua biaya dengan mata uang yang sama.",closingTitle:"Petualanganmu dimulai di sini.",closingDescription:"Rencanakan, jelajahi, dan siapkan perjalananmu dengan GlobeTrip.",closingButton:"Cari destinasi →",savedEyebrow:"KOLEKSI PERJALANANMU",savedTitle:"Favorit & Perjalanan Tersimpan ❤️",savedIntro:"Simpan destinasi favorit dan draf itinerary di perangkat ini agar mudah dibuka lagi.",favoriteDestinations:"Destinasi favorit",wishlistEmpty:"Belum ada destinasi favorit. Tekan tombol ♡ pada kartu destinasi.",savedItineraries:"Itinerary tersimpan",savedTripsEmpty:"Belum ada itinerary tersimpan.",savedNote:"Simpanan berada di browser perangkat ini. Menghapus data browser dapat menghapus simpanan; belum tersinkron ke akun atau perangkat lain.",safetyTitle:"Tips perjalanan yang lebih aman 🧭",safetyIntro:"Persiapan sederhana dapat membantu perjalanan lebih nyaman. Sesuaikan selalu dengan aturan dan kondisi lokal.",safety1Title:"📄 Dokumen dan kontak",safety1:"Simpan salinan dokumen penting secara aman, bagikan rencana perjalanan kepada orang tepercaya, dan catat kontak darurat lokal.",safety2Title:"🌦️ Cek kondisi setempat",safety2:"Periksa cuaca, peringatan perjalanan, jam buka, dan aturan tempat sebelum berangkat.",safety3Title:"🚕 Transportasi resmi",safety3:"Gunakan transportasi tepercaya, konfirmasi tarif bila perlu, dan periksa rute sebelum perjalanan.",safety4Title:"🤝 Hormati budaya lokal",safety4:"Pelajari kebiasaan setempat, aturan berpakaian di tempat tertentu, serta panduan menjaga alam dan satwa.",footer:"© 2026 GlobeTrip · Your Journey, Your Way."
+      },
+      en: {
+        navHome:"Home",navFeatures:"Features",navDestinations:"Destinations",navSaved:"Saved Trips",navSafety:"Travel Safety",navBooking:"Booking",navMaps:"Maps",navWeather:"Weather",navPlanner:"Itinerary",navBudget:"Budget",
+        eyebrow:"EXPLORE THE WORLD",headline:"Your journey, your way.",description:"Plan your dream trip, discover amazing destinations, and organize your travel budget in one place.",startButton:"Plan my trip →",exploreButton:"Explore features",
+        featuresTitle:"One place, endless possibilities.",featuresIntro:"Everything you need to organize your journey.",f1:"Smart Trip Planner",d1:"Plan activities based on your destination and interests.",f2:"Maps & Routes",d2:"Find destinations and open directions in Google Maps.",f3:"Weather Preview",d3:"Check the forecast before your journey.",f4:"Budget Planner",d4:"Estimate spending for transport, hotels, food, and activities.",openPlanner:"Build an itinerary →",openMaps:"Open maps →",openWeather:"Check weather →",openBudget:"Plan budget →",
+        destinationEyebrow:"FIND YOUR NEXT ESCAPE",destinationTitle:"Explore Destinations 🌍",destinationIntro:"Discover places that match your travel style.",destinationSearchPlaceholder:"Search destinations or countries...",all:"All",nature:"Nature",culture:"Culture",city:"City",beach:"Beach & Islands",adventure:"Adventure",food:"Food",baliDesc:"Tropical beaches, green rice terraces, and peaceful escapes.",kyotoDesc:"Discover traditional streets, temples, and Japanese culture.",alpsDesc:"Enjoy majestic mountains, alpine lakes, and scenic views.",rajaDesc:"Explore turquoise waters, tropical islands, and marine life.",nyDesc:"Experience iconic landmarks, city lights, and urban adventures.",agraDesc:"Discover historic architecture and remarkable cultural heritage.",exploreDestination:"Explore destination ↗",noDestination:"No destinations match your search.",
+        bookingEyebrow:"YOUR NEXT ADVENTURE",bookingIntro:"Search for flight, hotel, and transport options for your trip.",departureCity:"📍 Departure city",departurePlaceholder:"Example: Wakatobi, Indonesia",destination:"🌍 Destination",destinationPlaceholder:"Example: Bali, Indonesia",departDate:"🗓️ Departure date",returnDate:"🗓️ Return date (optional)",travelers:"👥 Travelers",hotelRooms:"🏨 Hotel rooms",searchFlights:"✈️ Search flights",findHotels:"🏨 Find hotels",findTransport:"🚆 Find transport",bookingNote:"Searches open through external services. Prices and availability can change. GlobeTrip does not directly sell tickets or confirm bookings.",
+        mapsTitle:"Find places and routes 🗺️",mapsIntro:"Enter a destination and, optionally, a starting point to open directions in Google Maps.",mapDestination:"Destination",mapDestinationPlaceholder:"Example: Beach in Bali",mapOrigin:"Starting point (optional)",travelMode:"Travel mode",car:"Car",walking:"Walking",bicycle:"Bicycle",publicTransport:"Public transport",searchDestination:"Search destination",getDirections:"Get directions",mapsNote:"Map and route results open in Google Maps.",
+        weatherTitle:"Check destination weather 🌦️",weatherIntro:"Enter a city to view current conditions and a forecast. An internet connection is required.",weatherCity:"City or destination",weatherPlaceholder:"Example: Kyoto, Japan",checkWeather:"Check weather",weatherNote:"Weather data is provided by Open-Meteo and may change. Check official weather sources for important decisions.",
+        plannerTitle:"Build your trip itinerary 🗓️",plannerIntro:"Create a draft daily plan based on your destination, duration, and interests. You can copy the result.",itineraryDestination:"Trip destination",tripDuration:"Trip length (days)",travelStyle:"Travel style",styleMixed:"Mixed: nature, culture, and relaxation",styleNature:"Nature and light adventure",styleCulture:"Culture and history",styleRelax:"Relaxation and food",extraInterests:"Extra interests (optional)",interestPlaceholder:"Example: beaches, museums, local food",makeItinerary:"Build itinerary",copyItinerary:"Copy itinerary",saveItinerary:"Save itinerary",plannerNote:"This itinerary is an automatically generated idea draft, not a reservation. Check opening hours, distances, safety, and local conditions before travelling.",
+        budgetTitle:"Estimate your travel budget 💰",budgetIntro:"Enter estimated costs to calculate the total and cost per person. Values use the currency you select.",currency:"Currency",budgetPeople:"Number of people",budgetDays:"Duration (days)",costTransport:"Transport",costStay:"Accommodation",costFood:"Food and drinks",costActivities:"Tickets and activities",costExtra:"Other costs",calculateBudget:"Calculate budget",resetBudget:"Reset",estimatedTotal:"Estimated total cost",budgetNote:"This is a manual calculator, not live market pricing. Enter all costs using the same currency.",closingTitle:"Your adventure starts here.",closingDescription:"Plan, explore, and prepare your journey with GlobeTrip.",closingButton:"Find destinations →",savedEyebrow:"YOUR TRAVEL COLLECTION",savedTitle:"Favorites & Saved Trips ❤️",savedIntro:"Save favorite destinations and itinerary drafts on this device so you can return to them later.",favoriteDestinations:"Favorite destinations",wishlistEmpty:"No favorite destinations yet. Press ♡ on a destination card.",savedItineraries:"Saved itineraries",savedTripsEmpty:"No saved itineraries yet.",savedNote:"Saved in this browser on this device. Clearing browser data may erase saved items; they are not synced across accounts or devices.",safetyTitle:"Travel more safely 🧭",safetyIntro:"A little preparation can make travel more comfortable. Always adapt to local rules and conditions.",safety1Title:"📄 Documents and contacts",safety1:"Keep secure copies of important documents, share your itinerary with someone you trust, and note local emergency contacts.",safety2Title:"🌦️ Check local conditions",safety2:"Check weather, travel advisories, opening hours, and site rules before you go.",safety3Title:"🚕 Trusted transport",safety3:"Use trusted transport, confirm fares when needed, and check the route before travelling.",safety4Title:"🤝 Respect local culture",safety4:"Learn local customs, dress rules for certain sites, and guidance for protecting nature and wildlife.",footer:"© 2026 GlobeTrip · Your Journey, Your Way."
       }
     };
 
     function toggleLanguage() {
       language = language === "id" ? "en" : "id";
-      const content = translations[language];
-
-      Object.keys(content).forEach(id => {
-        const element = document.getElementById(id);
-        if (element) element.textContent = content[id];
-      });
-
-      document.documentElement.lang = language;
-      document.getElementById("languageButton").textContent =
-        language === "id" ? "EN" : "ID";
+      applyLanguage();
+      if (typeof renderDestinations === "function") renderDestinations();
+      if (typeof renderSavedItems === "function") renderSavedItems();
     }
+    function applyLanguage() {
+      const dict = translations[language];
+      document.documentElement.lang = language;
+      document.getElementById("languageButton").textContent = language === "id" ? "EN" : "ID";
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (dict[key]) el.textContent = dict[key];
+      });
+      document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+        const key = el.getAttribute("data-i18n-placeholder");
+        if (dict[key]) el.placeholder = dict[key];
+      });
+    }
+
+    // Destination library: highlights and seasonal advice are general planning guidance.
+    const destinationData = [
+      {name:"Wakatobi, Indonesia",country:"Indonesia",category:"nature",img:"photo-1516690561799-46d8f74f9abf",desc:"Terumbu karang, pulau kecil, dan kehidupan bawah laut yang kaya.",best:"April–November",spots:"Wangi-Wangi • Hoga Island • Tomia • snorkeling dan diving",style:"nature"},
+      {name:"Bali, Indonesia",country:"Indonesia",category:"beach",img:"photo-1537996194471-e657df975ab4",desc:"Pantai, sawah terasering, pura, seni, dan desa yang tenang.",best:"April–Oktober",spots:"Ubud • Uluwatu • Ubud rice terraces • Nusa Penida",style:"mixed"},
+      {name:"Raja Ampat, Indonesia",country:"Indonesia",category:"beach",img:"photo-1516690561799-46d8f74f9abf",desc:"Kepulauan karst, air jernih, dan salah satu kawasan laut paling kaya.",best:"Oktober–April",spots:"Piaynemo • Wayag • Arborek • Dampier Strait",style:"nature"},
+      {name:"Labuan Bajo, Indonesia",country:"Indonesia",category:"adventure",img:"photo-1518548419970-58e3b4079ab2",desc:"Gerbang menuju pulau-pulau Komodo, bukit panorama, dan laut biru.",best:"April–November",spots:"Komodo National Park • Padar Island • Pink Beach",style:"nature"},
+      {name:"Yogyakarta, Indonesia",country:"Indonesia",category:"culture",img:"photo-1596402184320-417e7178b2cd",desc:"Warisan Jawa, kerajinan, pertunjukan seni, dan kuliner lokal.",best:"Mei–September",spots:"Borobudur • Prambanan • Malioboro • Keraton",style:"culture"},
+      {name:"Jakarta, Indonesia",country:"Indonesia",category:"city",img:"photo-1519501025264-65ba15a82390",desc:"Kota besar dengan museum, kawasan bersejarah, belanja, dan kuliner.",best:"Mei–September",spots:"Kota Tua • Monas • Museum Nasional • Glodok",style:"mixed"},
+      {name:"Komodo National Park, Indonesia",country:"Indonesia",category:"adventure",img:"photo-1518548419970-58e3b4079ab2",desc:"Bentang pulau kering, pantai, snorkeling, dan satwa ikonik Komodo.",best:"April–November",spots:"Padar Island • Komodo Island • Pink Beach",style:"nature"},
+      {name:"Bandung, Indonesia",country:"Indonesia",category:"food",img:"photo-1621275471769-e6aa344546d5",desc:"Udara pegunungan, kafe, mode, kebun teh, dan jajanan Sunda.",best:"Mei–September",spots:"Braga • Lembang • Kawah Putih • Saung Angklung Udjo",style:"mixed"},
+      {name:"Kyoto, Japan",country:"Japan",category:"culture",img:"photo-1493976040374-85c8e12f0c0e",desc:"Jalan tradisional, taman, kuil, dan budaya Jepang yang bersejarah.",best:"Maret–Mei; Oktober–November",spots:"Fushimi Inari • Kiyomizu-dera • Arashiyama • Gion",style:"culture"},
+      {name:"Tokyo, Japan",country:"Japan",category:"city",img:"photo-1540959733332-eab4deabeeaf",desc:"Perpaduan teknologi, lingkungan tradisional, belanja, dan kuliner.",best:"Maret–Mei; Oktober–November",spots:"Asakusa • Shibuya • Ueno • teamLab",style:"mixed"},
+      {name:"Osaka, Japan",country:"Japan",category:"food",img:"photo-1590559899731-a382839e5549",desc:"Kota ramah kuliner dengan hiburan, kastil, dan kawasan ramai.",best:"Maret–Mei; Oktober–November",spots:"Dotonbori • Osaka Castle • Kuromon Market",style:"relax"},
+      {name:"Seoul, South Korea",country:"South Korea",category:"city",img:"photo-1536098561742-ca998e48cbcc",desc:"Istana, budaya pop, belanja, kafe, dan lingkungan kota modern.",best:"April–Mei; September–Oktober",spots:"Gyeongbokgung • Bukchon • Myeongdong • Hongdae",style:"mixed"},
+      {name:"Bangkok, Thailand",country:"Thailand",category:"food",img:"photo-1508009603885-50cf7c579365",desc:"Kuil megah, pasar, jajanan jalanan, dan kehidupan kota yang dinamis.",best:"November–Februari",spots:"Grand Palace • Wat Arun • Chatuchak • Chinatown",style:"culture"},
+      {name:"Phuket, Thailand",country:"Thailand",category:"beach",img:"photo-1589394815804-964ed0be2eb5",desc:"Pantai tropis, teluk, pulau lepas pantai, dan aktivitas air.",best:"November–April",spots:"Kata Beach • Phang Nga Bay • Old Phuket Town",style:"nature"},
+      {name:"Singapore",country:"Singapore",category:"city",img:"photo-1525625293386-3f8f99389edd",desc:"Kota modern yang mudah dijelajahi dengan taman, museum, dan makanan.",best:"Februari–April",spots:"Gardens by the Bay • Marina Bay • Chinatown • Sentosa",style:"mixed"},
+      {name:"Kuala Lumpur, Malaysia",country:"Malaysia",category:"city",img:"photo-1596422846543-75c6fc197f07",desc:"Gedung ikonik, kawasan multikultural, pusat belanja, dan street food.",best:"Mei–Juli; Desember–Februari",spots:"Petronas Towers • Batu Caves • Central Market",style:"mixed"},
+      {name:"Hanoi, Vietnam",country:"Vietnam",category:"culture",img:"photo-1509030450996-dd1a26dda07a",desc:"Kota tua, danau, sejarah, kopi, dan masakan Vietnam.",best:"Maret–April; Oktober–November",spots:"Old Quarter • Hoan Kiem Lake • Temple of Literature",style:"culture"},
+      {name:"Ha Long Bay, Vietnam",country:"Vietnam",category:"nature",img:"photo-1528127269322-539801943592",desc:"Teluk dengan pulau batu kapur, gua, dan perjalanan perahu.",best:"Maret–Mei; September–November",spots:"Lan Ha Bay • Sung Sot Cave • kayak di teluk",style:"nature"},
+      {name:"Angkor, Cambodia",country:"Cambodia",category:"culture",img:"photo-1603262110263-fb0112e7cc33",desc:"Kompleks kuil kuno dan jejak peradaban Khmer.",best:"November–Februari",spots:"Angkor Wat • Bayon • Ta Prohm",style:"culture"},
+      {name:"Taj Mahal, Agra, India",country:"India",category:"culture",img:"photo-1564507592333-c60657eea523",desc:"Monumen marmer terkenal dan warisan arsitektur Mughal.",best:"Oktober–Maret",spots:"Taj Mahal • Agra Fort • Mehtab Bagh",style:"culture"},
+      {name:"Kathmandu, Nepal",country:"Nepal",category:"culture",img:"photo-1544735716-392fe2489ffa",desc:"Kota bersejarah dengan kuil, stupa, dan pemandangan Himalaya.",best:"Maret–Mei; September–November",spots:"Boudhanath • Swayambhunath • Patan Durbar Square",style:"culture"},
+      {name:"Swiss Alps, Switzerland",country:"Switzerland",category:"adventure",img:"photo-1531366936337-7c912a4589a7",desc:"Pegunungan, danau alpine, jalur hiking, dan desa pemandangan.",best:"Juni–September untuk hiking; Desember–Maret untuk salju",spots:"Lauterbrunnen • Zermatt • Interlaken • Jungfrau region",style:"nature"},
+      {name:"Paris, France",country:"France",category:"city",img:"photo-1502602898657-3e91760cbb34",desc:"Seni, arsitektur, kafe, taman, dan landmark ikonik.",best:"April–Juni; September–Oktober",spots:"Eiffel Tower • Louvre • Montmartre • Seine",style:"mixed"},
+      {name:"Rome, Italy",country:"Italy",category:"culture",img:"photo-1552832230-c0197dd311b5",desc:"Reruntuhan Romawi, piazza, gereja bersejarah, dan masakan Italia.",best:"April–Mei; September–Oktober",spots:"Colosseum • Roman Forum • Trevi Fountain • Vatican",style:"culture"},
+      {name:"Venice, Italy",country:"Italy",category:"culture",img:"photo-1514890547357-a9ee288728e0",desc:"Kanal, jembatan, arsitektur bersejarah, dan perjalanan gondola.",best:"April–Juni; September–Oktober",spots:"St Mark’s Square • Rialto Bridge • Grand Canal",style:"relax"},
+      {name:"Barcelona, Spain",country:"Spain",category:"city",img:"photo-1583422409516-2895a77efded",desc:"Arsitektur unik, pantai kota, pasar, dan budaya Catalonia.",best:"Mei–Juni; September–Oktober",spots:"Sagrada Família • Park Güell • Gothic Quarter",style:"mixed"},
+      {name:"Santorini, Greece",country:"Greece",category:"beach",img:"photo-1533105079780-92b9be482077",desc:"Desa bercat putih, pemandangan kaldera, dan matahari terbenam.",best:"April–Juni; September–Oktober",spots:"Oia • Fira • caldera viewpoints • Akrotiri",style:"relax"},
+      {name:"Istanbul, Türkiye",country:"Türkiye",category:"culture",img:"photo-1524231757912-21f4fe3a7200",desc:"Persimpangan budaya Eropa-Asia dengan bazar, masjid, dan sejarah.",best:"April–Mei; September–Oktober",spots:"Hagia Sophia • Blue Mosque • Grand Bazaar • Bosphorus",style:"culture"},
+      {name:"Cairo & Giza, Egypt",country:"Egypt",category:"culture",img:"photo-1539650116574-75c0c6d73f6e",desc:"Monumen Mesir kuno, museum, dan lanskap gurun.",best:"Oktober–April",spots:"Pyramids of Giza • Sphinx • Egyptian Museum",style:"culture"},
+      {name:"Cape Town, South Africa",country:"South Africa",category:"nature",img:"photo-1580060839134-75a5edca2e99",desc:"Pegunungan pesisir, pantai, kebun anggur, dan alam sekitar kota.",best:"November–Maret",spots:"Table Mountain • Cape Point • V&A Waterfront",style:"nature"},
+      {name:"Marrakech, Morocco",country:"Morocco",category:"culture",img:"photo-1539020140153-e479b8c22e70",desc:"Pasar tradisional, riad, taman, dan arsitektur Maroko.",best:"Maret–Mei; September–November",spots:"Jemaa el-Fnaa • Bahia Palace • Majorelle Garden",style:"culture"},
+      {name:"New York City, USA",country:"USA",category:"city",img:"photo-1519501025264-65ba15a82390",desc:"Landmark terkenal, museum, taman kota, dan lingkungan multikultural.",best:"April–Juni; September–November",spots:"Central Park • Statue of Liberty • Met • Times Square",style:"mixed"},
+      {name:"Grand Canyon, USA",country:"USA",category:"adventure",img:"photo-1474044159687-1ee9f3a51722",desc:"Ngarai luas, titik pandang, jalur hiking, dan formasi batuan.",best:"Maret–Mei; September–November",spots:"South Rim • Desert View • Bright Angel Trail",style:"nature"},
+      {name:"Yellowstone, USA",country:"USA",category:"nature",img:"photo-1472396961693-142e6e269027",desc:"Mata air panas, geyser, dan habitat satwa liar.",best:"Mei–September",spots:"Old Faithful • Grand Prismatic Spring • Lamar Valley",style:"nature"},
+      {name:"Vancouver, Canada",country:"Canada",category:"nature",img:"photo-1519832979-6fa011b87667",desc:"Kota pesisir dengan taman, pegunungan, dan aktivitas luar ruang.",best:"Mei–September",spots:"Stanley Park • Granville Island • Capilano area",style:"mixed"},
+      {name:"Banff, Canada",country:"Canada",category:"adventure",img:"photo-1503614472-8c93d56cd7b9",desc:"Danau biru kehijauan, pegunungan, dan jalur trekking.",best:"Juni–September untuk hiking; Desember–Maret untuk salju",spots:"Lake Louise • Moraine Lake • Banff town",style:"nature"},
+      {name:"Mexico City, Mexico",country:"Mexico",category:"food",img:"photo-1512813195386-6cf811ad3542",desc:"Situs sejarah, museum, taman, dan kuliner Meksiko.",best:"Maret–Mei; Oktober–November",spots:"Historic Centre • Chapultepec • Coyoacán",style:"culture"},
+      {name:"Rio de Janeiro, Brazil",country:"Brazil",category:"beach",img:"photo-1483729558449-99ef09a8c325",desc:"Pantai kota, pegunungan, musik, dan panorama teluk.",best:"Mei–Oktober",spots:"Christ the Redeemer • Sugarloaf • Copacabana",style:"mixed"},
+      {name:"Machu Picchu, Peru",country:"Peru",category:"adventure",img:"photo-1526392060635-9d6019884377",desc:"Kota Inca di pegunungan dengan lanskap Andes yang dramatis.",best:"Mei–September",spots:"Machu Picchu citadel • Sacred Valley • Cusco",style:"nature"},
+      {name:"Sydney, Australia",country:"Australia",category:"city",img:"photo-1506973035872-a4ec16b8e8d9",desc:"Pelabuhan, pantai, bangunan ikonik, dan budaya kafe.",best:"September–November; Maret–Mei",spots:"Opera House • Harbour Bridge • Bondi Beach",style:"mixed"},
+      {name:"Great Barrier Reef, Australia",country:"Australia",category:"beach",img:"photo-1544551763-46a013bb70d5",desc:"Terumbu karang luas dan kesempatan melihat kehidupan laut.",best:"Juni–Oktober",spots:"Cairns • Whitsundays • reef snorkelling trips",style:"nature"},
+      {name:"Queenstown, New Zealand",country:"New Zealand",category:"adventure",img:"photo-1464822759023-fed622ff2c3b",desc:"Danau dan pegunungan untuk hiking, pemandangan, dan aktivitas petualangan.",best:"Desember–Februari untuk musim panas; Juni–Agustus untuk ski",spots:"Lake Wakatipu • Skyline • Glenorchy • Remarkables",style:"nature"},
+      {name:"Fiji Islands",country:"Fiji",category:"beach",img:"photo-1500375592092-40eb2168fd21",desc:"Pulau tropis, laguna, dan suasana santai di Pasifik Selatan.",best:"Mei–Oktober",spots:"Mamanuca Islands • Yasawa Islands • coral reefs",style:"relax"},
+      {name:"Reykjavík, Iceland",country:"Iceland",category:"nature",img:"photo-1476610182048-b716b8518aae",desc:"Gerbang menuju air terjun, lanskap vulkanik, dan cahaya utara musiman.",best:"Juni–Agustus untuk perjalanan darat; September–Maret untuk peluang aurora",spots:"Golden Circle • Blue Lagoon • Hallgrímskirkja",style:"nature"},
+      {name:"Dubai, UAE",country:"UAE",category:"city",img:"photo-1512453979798-5ea266f8880c",desc:"Arsitektur modern, gurun, pusat belanja, dan pengalaman kuliner.",best:"November–Maret",spots:"Burj Khalifa • Al Fahidi • Dubai Creek • desert safari",style:"mixed"},
+      {name:"Petra, Jordan",country:"Jordan",category:"culture",img:"photo-1544735716-392fe2489ffa",desc:"Kota kuno yang dipahat pada batu pasir merah muda.",best:"Maret–Mei; September–November",spots:"The Treasury • Siq • Monastery",style:"culture"},
+      {name:"Zanzibar, Tanzania",country:"Tanzania",category:"beach",img:"photo-1500375592092-40eb2168fd21",desc:"Pantai berpasir putih, laut hangat, dan kota tua bersejarah.",best:"Juni–Oktober; Desember–Februari",spots:"Stone Town • Nungwi • Jozani Forest",style:"relax"}
+    ];
+    const categoryLabels = {
+      id:{nature:"ALAM",culture:"BUDAYA",city:"KOTA",beach:"PANTAI & PULAU",adventure:"PETUALANGAN",food:"KULINER"},
+      en:{nature:"NATURE",culture:"CULTURE",city:"CITY",beach:"BEACH & ISLANDS",adventure:"ADVENTURE",food:"FOOD"}
+    };
+    const destinationDescriptionsEn = {
+      "Wakatobi, Indonesia":"Coral reefs, small islands, and rich underwater biodiversity.",
+      "Bali, Indonesia":"Beaches, terraced rice fields, temples, arts, and peaceful villages.",
+      "Raja Ampat, Indonesia":"Limestone islands, clear water, and exceptionally rich marine life.",
+      "Labuan Bajo, Indonesia":"A gateway to dramatic islands, sailing trips, and Komodo National Park.",
+      "Yogyakarta, Indonesia":"Javanese arts, royal heritage, street food, and nearby ancient temples.",
+      "Jakarta, Indonesia":"A lively capital with museums, food districts, shopping, and historic quarters.",
+      "Komodo National Park, Indonesia":"Savannah islands, remarkable wildlife, and clear tropical waters.",
+      "Bandung, Indonesia":"Cool highland scenery, creative cafes, shopping, and nearby volcanic landscapes.",
+      "Kyoto, Japan":"Traditional streets, temples, gardens, and distinctive Japanese culture.",
+      "Tokyo, Japan":"A dynamic mix of modern neighborhoods, historic shrines, shopping, and food.",
+      "Osaka, Japan":"A friendly city known for street food, lively districts, and easy day trips.",
+      "Seoul, South Korea":"Palaces, contemporary culture, shopping streets, and Korean cuisine.",
+      "Bangkok, Thailand":"Golden temples, river views, lively markets, and famous street food.",
+      "Phuket, Thailand":"Island beaches, viewpoints, boat trips, and coastal villages.",
+      "Singapore":"A compact city with gardens, diverse food, waterfront views, and modern architecture.",
+      "Kuala Lumpur, Malaysia":"A multicultural capital with iconic towers, markets, and varied cuisine.",
+      "Hanoi, Vietnam":"Historic streets, lakes, traditional architecture, and Vietnamese food culture.",
+      "Ha Long Bay, Vietnam":"Limestone karsts rise from emerald water across a scenic bay.",
+      "Angkor, Cambodia":"A vast archaeological landscape featuring temples and Khmer heritage.",
+      "Agra, India":"Historic architecture and remarkable cultural heritage, including the Taj Mahal.",
+      "Kathmandu, Nepal":"Historic squares, temples, local markets, and views toward the Himalayas.",
+      "Swiss Alps, Switzerland":"Majestic mountains, alpine lakes, scenic railways, and outdoor trails.",
+      "Paris, France":"Art museums, historic avenues, architecture, gardens, and cafe culture.",
+      "Rome, Italy":"Ancient ruins, grand squares, art, and classic Italian food.",
+      "Venice, Italy":"Canals, historic bridges, quiet lanes, and distinctive lagoon scenery.",
+      "Barcelona, Spain":"Architectural landmarks, Mediterranean beaches, markets, and Catalan culture.",
+      "Santorini, Greece":"Whitewashed villages, caldera views, and memorable sunsets.",
+      "Istanbul, Türkiye":"A meeting point of Europe and Asia, with bazaars, mosques, and layered history.",
+      "Cairo & Giza, Egypt":"Ancient Egyptian monuments, museums, and desert landscapes.",
+      "Cape Town, South Africa":"Coastal mountains, beaches, vineyards, and outdoor experiences near the city.",
+      "Marrakech, Morocco":"Traditional markets, riads, gardens, and Moroccan architecture.",
+      "New York City, USA":"Iconic landmarks, museums, city parks, and multicultural neighborhoods.",
+      "Grand Canyon, USA":"Vast canyon views, scenic overlooks, hiking routes, and striking rock formations.",
+      "Yellowstone, USA":"Hot springs, geysers, and habitats for diverse wildlife.",
+      "Vancouver, Canada":"A coastal city with parks, mountains, and outdoor activities.",
+      "Banff, Canada":"Turquoise lakes, mountain scenery, and trails for hiking or winter sports.",
+      "Mexico City, Mexico":"Historic sites, museums, green spaces, and distinctive Mexican cuisine.",
+      "Rio de Janeiro, Brazil":"Urban beaches, mountains, music, and sweeping bay views.",
+      "Machu Picchu, Peru":"An Inca citadel in the mountains amid dramatic Andean scenery.",
+      "Sydney, Australia":"A famous harbor, beaches, landmark architecture, and cafe culture.",
+      "Great Barrier Reef, Australia":"An extensive coral reef system with opportunities to observe marine life.",
+      "Queenstown, New Zealand":"Lakes and mountains for hiking, sightseeing, and outdoor adventures.",
+      "Fiji Islands":"Tropical islands, lagoons, and a relaxed South Pacific atmosphere.",
+      "Reykjavík, Iceland":"A gateway to waterfalls, volcanic landscapes, and seasonal northern lights.",
+      "Dubai, UAE":"Modern architecture, desert experiences, shopping, and diverse food.",
+      "Petra, Jordan":"An ancient city carved into rose-colored sandstone.",
+      "Zanzibar, Tanzania":"White-sand beaches, warm waters, and a historic old town."
+    };
+
+    function destinationImage(id) {
+      // Use valid Unsplash photo IDs when available; fall back to a scenic search link image if one fails.
+      return "https://images.unsplash.com/" + id + "?auto=format&fit=crop&w=900&q=80";
+    }
+    function renderDestinations() {
+      const grid = document.getElementById("destinationGrid");
+      const id = language === "id";
+      grid.innerHTML = destinationData.map((d,i) => {
+        const map = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(d.name);
+        const alt = (id ? "Pemandangan destinasi " : "Scenery of ") + d.name;
+        const label = categoryLabels[language][d.category] || d.category.toUpperCase();
+        const desc = id ? d.desc : (d.descEn || destinationDescriptionsEn[d.name] || d.desc);
+        const bestLabel = id ? "Waktu terbaik" : "Best time to visit";
+        const spotsLabel = id ? "Rekomendasi tempat" : "Suggested highlights";
+        const planLabel = id ? "Rencanakan trip" : "Plan this trip";
+        const mapLabel = id ? "Buka peta ↗" : "Open map ↗";
+        return `<article class="destination-card" data-category="${d.category}" data-name="${d.name} ${d.country}">
+          <img src="${destinationImage(d.img)}" alt="${alt}" loading="lazy" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=80'">
+          <div class="destination-info"><span class="tag">${label}</span><h3>${d.name}</h3><p>${desc}</p>
+          <div class="destination-details"><div><strong>${bestLabel}:</strong> ${d.best}</div><div style="margin-top:6px"><strong>${spotsLabel}:</strong> ${d.spots}</div></div>
+          <div class="destination-actions"><button type="button" class="btn btn-primary" onclick="planDestination(${i})">${planLabel}</button><button type="button" class="btn save-btn" onclick="toggleWishlist(${i})" aria-label="Save ${d.name}">${isWishlisted(d.name) ? (id ? "♥ Tersimpan" : "♥ Saved") : (id ? "♡ Simpan" : "♡ Save")}</button><a class="btn btn-light" target="_blank" rel="noopener noreferrer" href="${map}">${mapLabel}</a></div></div></article>`;
+      }).join("");
+      filterDestinations();
+    }
+    function planDestination(index) {
+      const d = destinationData[index];
+      if (!d) return;
+      document.getElementById("itinerary-destination").value = d.name;
+      document.getElementById("itinerary-style").value = d.style || "mixed";
+      document.getElementById("booking-to").value = d.name;
+      document.getElementById("map-destination").value = d.name;
+      document.getElementById("weather-city").value = d.name;
+      document.getElementById("plannerStatus").textContent = language === "id" ? `${d.name} ditambahkan ke Trip Planner dan kolom destinasi Booking, Maps, serta Cuaca.` : `${d.name} added to Trip Planner and the Booking, Maps, and Weather destination fields.`;
+      document.getElementById("planner").scrollIntoView({behavior:"smooth",block:"start"});
+    }
+
+    function setDestinationFilter(category, button) {
+      activeDestinationCategory = category;
+      document.querySelectorAll(".destination-controls .filter").forEach(el => el.classList.toggle("active", el === button));
+      filterDestinations();
+    }
+    function filterDestinations() {
+      const term = document.getElementById("destinationSearch").value.trim().toLowerCase();
+      let visible = 0;
+      document.querySelectorAll(".destination-card").forEach(card => {
+        const categoryMatch = activeDestinationCategory === "all" || card.dataset.category === activeDestinationCategory;
+        const textMatch = (card.dataset.name + " " + card.textContent).toLowerCase().includes(term);
+        const show = categoryMatch && textMatch;
+        card.hidden = !show;
+        if (show) visible++;
+      });
+      document.getElementById("destinationEmpty").hidden = visible !== 0;
+      const count = document.getElementById("destinationCount");
+      if (count) count.textContent = language === "id" ? `${visible} destinasi ditampilkan dari ${destinationData.length}` : `${visible} of ${destinationData.length} destinations shown`;
+    }
+
+    function val(id) { return document.getElementById(id).value.trim(); }
+    function openExternal(url) {
+      const opened = window.open(url, "_blank", "noopener,noreferrer");
+      if (!opened) window.location.href = url;
+    }
+    function dateInputsValid() {
+      const depart = val("booking-depart"), back = val("booking-return");
+      if (depart && back && back < depart) {
+        alert(language === "id" ? "Tanggal pulang tidak boleh sebelum tanggal berangkat." : "Return date cannot be before the departure date.");
+        return false;
+      }
+      const guests = Number(val("booking-guests"));
+      if (!Number.isInteger(guests) || guests < 1 || guests > 20) {
+        alert(language === "id" ? "Jumlah pelancong harus antara 1 dan 20." : "Travelers must be between 1 and 20.");
+        return false;
+      }
+      return true;
+    }
+    function gtSearchFlights() {
+      const from = val("booking-from"), to = val("booking-to"), depart = val("booking-depart"), back = val("booking-return");
+      if (!from || !to) { alert(language === "id" ? "Isi kota keberangkatan dan destinasi terlebih dahulu." : "Enter both departure city and destination first."); return; }
+      if (!dateInputsValid()) return;
+      let query = "flights from " + from + " to " + to;
+      if (depart) query += " on " + depart;
+      if (back) query += " return " + back;
+      document.getElementById("bookingStatus").textContent = language === "id" ? "Membuka pencarian penerbangan di Google Travel. Harga dan jadwal perlu diperiksa di layanan tersebut." : "Opening flight search in Google Travel. Check prices and schedules on that service.";
+      openExternal("https://www.google.com/travel/flights?q=" + encodeURIComponent(query));
+    }
+    function gtSearchHotels() {
+      const to = val("booking-to"), depart = val("booking-depart"), back = val("booking-return");
+      const guests = Number(val("booking-guests") || "1"), rooms = Number(val("booking-room") || "1");
+      if (!to) { alert(language === "id" ? "Isi destinasi terlebih dahulu." : "Enter a destination first."); return; }
+      if (!dateInputsValid()) return;
+      if (!Number.isInteger(rooms) || rooms < 1 || rooms > 10) { alert(language === "id" ? "Jumlah kamar harus antara 1 dan 10." : "Rooms must be between 1 and 10."); return; }
+      let query = to + " hotels";
+      if (depart) query += " check-in " + depart;
+      if (back) query += " check-out " + back;
+      query += " for " + guests + " travelers, " + rooms + " rooms";
+      document.getElementById("bookingStatus").textContent = language === "id" ? "Membuka pencarian hotel di Google Travel. Periksa detail dan ketersediaan sebelum memesan." : "Opening hotel search in Google Travel. Check details and availability before booking.";
+      openExternal("https://www.google.com/travel/hotels?q=" + encodeURIComponent(query));
+    }
+    function gtSearchTransport() {
+      const from = val("booking-from"), to = val("booking-to");
+      if (!to) { alert(language === "id" ? "Isi destinasi terlebih dahulu." : "Enter a destination first."); return; }
+      let url;
+      if (from) url = "https://www.google.com/maps/dir/?api=1&origin=" + encodeURIComponent(from) + "&destination=" + encodeURIComponent(to) + "&travelmode=transit";
+      else url = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("public transport in " + to);
+      document.getElementById("bookingStatus").textContent = language === "id" ? "Membuka opsi transportasi umum di Google Maps. Rute yang tersedia bergantung pada wilayah." : "Opening public transport options in Google Maps. Route availability depends on the region.";
+      openExternal(url);
+    }
+
+    function globeTripSearch() {
+      const destination = val("map-destination");
+      if (!destination) { alert(language === "id" ? "Masukkan destinasi terlebih dahulu." : "Please enter a destination first."); return; }
+      document.getElementById("mapsStatus").textContent = language === "id" ? "Membuka hasil pencarian lokasi di Google Maps." : "Opening location search in Google Maps.";
+      openExternal("https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(destination));
+    }
+    function globeTripDirections() {
+      const destination = val("map-destination"), origin = val("map-origin"), mode = val("map-mode");
+      if (!destination) { alert(language === "id" ? "Masukkan destinasi terlebih dahulu." : "Please enter a destination first."); return; }
+      let url = "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(destination) + "&travelmode=" + encodeURIComponent(mode);
+      if (origin) url += "&origin=" + encodeURIComponent(origin);
+      document.getElementById("mapsStatus").textContent = language === "id" ? "Membuka petunjuk arah di Google Maps." : "Opening directions in Google Maps.";
+      openExternal(url);
+    }
+
+    async function getWeather() {
+      const city = val("weather-city");
+      const status = document.getElementById("weatherStatus"), result = document.getElementById("weatherResult");
+      result.innerHTML = "";
+      if (!city) { alert(language === "id" ? "Masukkan kota atau destinasi terlebih dahulu." : "Enter a city or destination first."); return; }
+      status.textContent = language === "id" ? "Sedang mencari lokasi dan data cuaca..." : "Looking up location and weather...";
+      try {
+        const geoRes = await fetch("https://geocoding-api.open-meteo.com/v1/search?name=" + encodeURIComponent(city) + "&count=1&language=" + language + "&format=json");
+        if (!geoRes.ok) throw new Error("geo");
+        const geoData = await geoRes.json();
+        if (!geoData.results || !geoData.results.length) throw new Error("notfound");
+        const place = geoData.results[0];
+        const weatherRes = await fetch("https://api.open-meteo.com/v1/forecast?latitude=" + place.latitude + "&longitude=" + place.longitude + "&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&forecast_days=3&timezone=auto");
+        if (!weatherRes.ok) throw new Error("weather");
+        const data = await weatherRes.json(), current = data.current, daily = data.daily;
+        const label = weatherLabel(current.weather_code);
+        status.textContent = (language === "id" ? "Cuaca untuk " : "Weather for ") + [place.name, place.admin1, place.country].filter(Boolean).join(", ");
+        const currentCard = document.createElement("div");
+        currentCard.className = "result-item";
+        currentCard.innerHTML = '<div class="weather-main"><div class="weather-icon">' + weatherEmoji(current.weather_code, current.is_day) + '</div><div><div class="weather-temp">' + Math.round(current.temperature_2m) + '°C</div><strong>' + label + '</strong><div class="small-muted">' + (language === "id" ? "Terasa seperti " : "Feels like ") + Math.round(current.apparent_temperature) + '°C</div></div></div><p class="small-muted">' + (language === "id" ? "Kelembapan: " : "Humidity: ") + current.relative_humidity_2m + '% · ' + (language === "id" ? "Angin: " : "Wind: ") + Math.round(current.wind_speed_10m) + ' km/jam · ' + (language === "id" ? "Hujan saat ini: " : "Current precipitation: ") + current.precipitation + ' mm</p>';
+        result.appendChild(currentCard);
+        for (let i = 0; i < daily.time.length; i++) {
+          const d = document.createElement("div"); d.className = "result-item";
+          const day = new Date(daily.time[i] + "T12:00:00").toLocaleDateString(language === "id" ? "id-ID" : "en-US", {weekday:"long",day:"numeric",month:"short"});
+          d.innerHTML = '<strong>' + day + ' · ' + weatherEmoji(daily.weather_code[i], 1) + ' ' + weatherLabel(daily.weather_code[i]) + '</strong><p>' + (language === "id" ? "Suhu " : "Temperature ") + Math.round(daily.temperature_2m_min[i]) + '–' + Math.round(daily.temperature_2m_max[i]) + '°C · ' + (language === "id" ? "Peluang hujan maksimum " : "Max precipitation chance ") + (daily.precipitation_probability_max[i] ?? "—") + '%</p>';
+          result.appendChild(d);
+        }
+      } catch (e) {
+        status.textContent = e.message === "notfound"
+          ? (language === "id" ? "Lokasi tidak ditemukan. Coba nama kota dan negara, misalnya Kyoto, Japan." : "Location not found. Try a city and country, such as Kyoto, Japan.")
+          : (language === "id" ? "Data cuaca gagal dimuat. Periksa koneksi internet lalu coba lagi." : "Weather data could not load. Check your internet connection and try again.");
+      }
+    }
+    function weatherLabel(code) {
+      const id = {0:"Cerah",1:"Cerah sebagian",2:"Berawan sebagian",3:"Mendung",45:"Berkabut",48:"Kabut beku",51:"Gerimis ringan",53:"Gerimis",55:"Gerimis lebat",56:"Gerimis beku ringan",57:"Gerimis beku lebat",61:"Hujan ringan",63:"Hujan",65:"Hujan lebat",66:"Hujan beku ringan",67:"Hujan beku lebat",71:"Salju ringan",73:"Salju",75:"Salju lebat",77:"Butiran salju",80:"Hujan sesaat ringan",81:"Hujan sesaat",82:"Hujan sesaat lebat",85:"Hujan salju ringan",86:"Hujan salju lebat",95:"Badai petir",96:"Badai petir dengan hujan es",99:"Badai petir kuat"};
+      const en = {0:"Clear",1:"Mainly clear",2:"Partly cloudy",3:"Overcast",45:"Fog",48:"Depositing rime fog",51:"Light drizzle",53:"Drizzle",55:"Dense drizzle",56:"Light freezing drizzle",57:"Dense freezing drizzle",61:"Slight rain",63:"Rain",65:"Heavy rain",66:"Light freezing rain",67:"Heavy freezing rain",71:"Slight snow",73:"Snow",75:"Heavy snow",77:"Snow grains",80:"Light rain showers",81:"Rain showers",82:"Heavy rain showers",85:"Light snow showers",86:"Heavy snow showers",95:"Thunderstorm",96:"Thunderstorm with hail",99:"Severe thunderstorm"};
+      return (language === "id" ? id : en)[code] || (language === "id" ? "Kondisi cuaca" : "Weather conditions");
+    }
+    function weatherEmoji(code, isDay) {
+      if (code === 0) return isDay ? "☀️" : "🌙";
+      if ([1,2].includes(code)) return "🌤️";
+      if ([3,45,48].includes(code)) return "☁️";
+      if ([51,53,55,56,57,61,63,65,66,67,80,81,82].includes(code)) return "🌧️";
+      if ([71,73,75,77,85,86].includes(code)) return "🌨️";
+      if ([95,96,99].includes(code)) return "⛈️";
+      return "🌦️";
+    }
+
+    function buildItinerary() {
+      const destination = val("itinerary-destination"), days = Number(val("itinerary-days"));
+      const style = val("itinerary-style"), interests = val("itinerary-notes");
+      const result = document.getElementById("itineraryResult"), status = document.getElementById("plannerStatus");
+      result.innerHTML = ""; latestItineraryText = "";
+      if (!destination) { alert(language === "id" ? "Masukkan destinasi perjalanan terlebih dahulu." : "Enter a trip destination first."); return; }
+      if (!Number.isInteger(days) || days < 1 || days > 14) { alert(language === "id" ? "Durasi perjalanan harus 1 sampai 14 hari." : "Trip length must be between 1 and 14 days."); return; }
+      document.getElementById("budget-days").value = String(days);
+      calculateBudget();
+      const plans = {
+        mixed: [
+          [["Pagi","Morning","Cari sarapan lokal dan jelajahi area sekitar penginapan." ,"Find local breakfast and explore the area near your accommodation."],["Siang","Afternoon","Kunjungi atraksi utama atau tempat alam populer." ,"Visit a main attraction or a popular nature spot."],["Sore","Evening","Nikmati kuliner lokal dan siapkan rencana esok hari." ,"Enjoy local food and prepare for the next day."]],
+          [["Pagi","Morning","Kunjungi landmark budaya atau kawasan bersejarah." ,"Visit a cultural landmark or historic district."],["Siang","Afternoon","Pilih aktivitas sesuai minat dan cek waktu tempuh." ,"Choose an activity that fits your interests and check travel times."],["Sore","Evening","Cari tempat santai untuk menikmati matahari terbenam." ,"Find a relaxing place to enjoy the sunset."]],
+          [["Pagi","Morning","Mulai dengan aktivitas ringan dan sarapan." ,"Start with a light activity and breakfast."],["Siang","Afternoon","Sisihkan waktu untuk atraksi pilihan atau belanja oleh-oleh." ,"Set aside time for a chosen attraction or souvenir shopping."],["Sore","Evening","Nikmati makan malam dan evaluasi anggaran perjalanan." ,"Enjoy dinner and review your trip budget."]]
+        ],
+        nature: [
+          [["Pagi","Morning","Berangkat lebih awal ke taman, pantai, atau jalur alam yang resmi." ,"Head early to an official park, beach, or nature trail."],["Siang","Afternoon","Makan siang dan nikmati pemandangan di area yang aman." ,"Have lunch and enjoy the view in a safe area."],["Sore","Evening","Kembali sebelum gelap dan beristirahat." ,"Return before dark and rest."]],
+          [["Pagi","Morning","Coba aktivitas alam yang sesuai kondisi dan kemampuan." ,"Try a nature activity suited to your conditions and ability."],["Siang","Afternoon","Jelajahi spot alam lain dengan transportasi yang direncanakan." ,"Explore another nature spot using planned transport."],["Sore","Evening","Cicipi makanan lokal dan pulihkan energi." ,"Try local food and recharge."]],
+          [["Pagi","Morning","Pilih pantai, taman, atau kebun yang belum dikunjungi." ,"Choose a beach, park, or garden you have not visited."],["Siang","Afternoon","Ambil waktu santai dan dokumentasikan perjalanan." ,"Take a relaxed break and document the trip."],["Sore","Evening","Kembali ke penginapan dan periksa rencana esok hari." ,"Return to your accommodation and review tomorrow's plan."]]
+        ],
+        culture: [
+          [["Pagi","Morning","Kunjungi museum atau situs budaya; cek jam buka terlebih dahulu." ,"Visit a museum or cultural site; check opening hours first."],["Siang","Afternoon","Coba makanan lokal dan pelajari cerita tempat tersebut." ,"Try local food and learn the story behind the place."],["Sore","Evening","Jelajahi kawasan bersejarah dengan menghormati adat setempat." ,"Explore a historic district while respecting local customs."]],
+          [["Pagi","Morning","Kunjungi tempat bersejarah atau pusat kerajinan lokal." ,"Visit a historic place or local craft center."],["Siang","Afternoon","Ikuti tur resmi atau kegiatan budaya yang tersedia." ,"Join an official tour or available cultural activity."],["Sore","Evening","Nikmati pertunjukan atau kuliner lokal jika tersedia." ,"Enjoy a performance or local food if available."]],
+          [["Pagi","Morning","Pilih satu situs budaya favorit dan luangkan waktu cukup." ,"Choose a favorite cultural site and allow enough time."],["Siang","Afternoon","Belanja suvenir dari penjual lokal secara bijak." ,"Shop for souvenirs from local sellers thoughtfully."],["Sore","Evening","Susun catatan perjalanan dan persiapkan kepulangan." ,"Write travel notes and prepare for departure."]]
+        ],
+        relax: [
+          [["Pagi","Morning","Sarapan santai di kafe atau tempat makan lokal." ,"Have a relaxed breakfast at a cafe or local eatery."],["Siang","Afternoon","Pilih satu atraksi ringan tanpa jadwal yang terlalu padat." ,"Choose one light attraction without an overly packed schedule."],["Sore","Evening","Nikmati pemandangan dan makan malam dengan santai." ,"Enjoy the scenery and a relaxed dinner."]],
+          [["Pagi","Morning","Mulai hari tanpa terburu-buru dan kunjungi pasar lokal." ,"Start slowly and visit a local market."],["Siang","Afternoon","Coba makanan khas dan istirahat di tempat nyaman." ,"Try local specialties and rest somewhere comfortable."],["Sore","Evening","Pilih aktivitas ringan sesuai energi dan cuaca." ,"Choose a light activity based on your energy and the weather."]],
+          [["Pagi","Morning","Kunjungi tempat favorit atau area belanja lokal." ,"Visit a favorite place or local shopping area."],["Siang","Afternoon","Sisakan waktu bebas untuk aktivitas spontan." ,"Leave free time for spontaneous activities."],["Sore","Evening","Makan malam, cek barang bawaan, dan beristirahat." ,"Have dinner, check your belongings, and rest."]]
+        ]
+      };
+      const selected = plans[style] || plans.mixed;
+      for (let i = 0; i < days; i++) {
+        const dayPlan = selected[i % selected.length];
+        const card = document.createElement("div"); card.className = "result-item";
+        const heading = document.createElement("strong");
+        heading.textContent = (language === "id" ? "Hari " : "Day ") + (i + 1) + " — " + destination;
+        card.appendChild(heading);
+        const list = document.createElement("ul");
+        dayPlan.forEach(item => {
+          const li = document.createElement("li");
+          li.style.margin = "8px 0";
+          const title = language === "id" ? item[0] : item[1];
+          const description = language === "id" ? item[2] : item[3];
+          li.textContent = title + ": " + description;
+          list.appendChild(li);
+        });
+        if (interests) {
+          const li = document.createElement("li");
+          li.style.margin = "8px 0";
+          li.textContent = (language === "id" ? "Minat tambahan: " : "Extra interests: ") + interests + (language === "id" ? " (pilih aktivitas yang sesuai di " + destination + ")." : " (choose a suitable activity in " + destination + ").");
+          list.appendChild(li);
+        }
+        card.appendChild(list); result.appendChild(card);
+        latestItineraryText += heading.textContent + "\n" + dayPlan.map(item => "• " + (language === "id" ? item[0] + ": " + item[2] : item[1] + ": " + item[3])).join("\n") + (interests ? "\n• " + (language === "id" ? "Minat tambahan: " : "Extra interests: ") + interests : "") + "\n\n";
+      }
+      status.textContent = language === "id" ? "Draf itinerary berhasil dibuat. Sesuaikan dengan jarak, jam buka, dan kebutuhanmu." : "Itinerary draft created. Adjust it for distances, opening hours, and your needs.";
+    }
+    async function copyItinerary() {
+      if (!latestItineraryText) { alert(language === "id" ? "Buat itinerary terlebih dahulu." : "Build an itinerary first."); return; }
+      try {
+        await navigator.clipboard.writeText(latestItineraryText);
+        document.getElementById("plannerStatus").textContent = language === "id" ? "Itinerary berhasil disalin." : "Itinerary copied.";
+      } catch (e) {
+        const area = document.createElement("textarea"); area.value = latestItineraryText; document.body.appendChild(area); area.select();
+        const ok = document.execCommand("copy"); area.remove();
+        document.getElementById("plannerStatus").textContent = ok ? (language === "id" ? "Itinerary berhasil disalin." : "Itinerary copied.") : (language === "id" ? "Tidak dapat menyalin otomatis. Pilih dan salin teks itinerary secara manual." : "Could not copy automatically. Select and copy the itinerary text manually.");
+      }
+    }
+
+    const WISHLIST_KEY = "globetrip-wishlist-v1";
+    const SAVED_TRIPS_KEY = "globetrip-saved-trips-v1";
+    function readLocalList(key) {
+      try { const value = JSON.parse(localStorage.getItem(key) || "[]"); return Array.isArray(value) ? value : []; }
+      catch (e) { return []; }
+    }
+    function writeLocalList(key, list) {
+      try { localStorage.setItem(key, JSON.stringify(list)); return true; }
+      catch (e) { return false; }
+    }
+    function isWishlisted(name) { return readLocalList(WISHLIST_KEY).some(item => item.name === name); }
+    function toggleWishlist(index) {
+      const d = destinationData[index]; if (!d) return;
+      let list = readLocalList(WISHLIST_KEY);
+      if (list.some(item => item.name === d.name)) list = list.filter(item => item.name !== d.name);
+      else list.push({name:d.name,country:d.country,category:d.category,best:d.best,spots:d.spots,style:d.style});
+      if (!writeLocalList(WISHLIST_KEY,list)) alert(language === "id" ? "Simpanan tidak tersedia di mode browser ini." : "Saving is unavailable in this browser mode.");
+      renderDestinations(); renderSavedItems();
+    }
+    function renderSavedItems() {
+      const wishlist = readLocalList(WISHLIST_KEY), trips = readLocalList(SAVED_TRIPS_KEY);
+      const wishGrid = document.getElementById("wishlistGrid"), tripGrid = document.getElementById("savedTripsGrid");
+      if (!wishGrid || !tripGrid) return;
+      wishGrid.innerHTML = ""; tripGrid.innerHTML = "";
+      wishlist.forEach(item => {
+        const card = document.createElement("article"); card.className = "saved-card";
+        const title = document.createElement("h3"); title.textContent = "❤️ " + item.name; card.appendChild(title);
+        const details = document.createElement("p"); details.textContent = (language === "id" ? "Waktu terbaik: " : "Best time: ") + item.best + "\n" + (language === "id" ? "Rekomendasi: " : "Highlights: ") + item.spots; card.appendChild(details);
+        const actions = document.createElement("div"); actions.className = "actions";
+        const plan = document.createElement("button"); plan.className = "btn btn-primary"; plan.textContent = language === "id" ? "Rencanakan" : "Plan trip"; plan.onclick = () => { const index = destinationData.findIndex(d => d.name === item.name); if (index >= 0) planDestination(index); };
+        const remove = document.createElement("button"); remove.className = "btn btn-light"; remove.textContent = language === "id" ? "Hapus" : "Remove"; remove.onclick = () => { writeLocalList(WISHLIST_KEY, readLocalList(WISHLIST_KEY).filter(d => d.name !== item.name)); renderDestinations(); renderSavedItems(); };
+        actions.append(plan,remove); card.appendChild(actions); wishGrid.appendChild(card);
+      });
+      trips.forEach((trip,index) => {
+        const card = document.createElement("article"); card.className = "saved-card";
+        const title = document.createElement("h3"); title.textContent = trip.title || ((language === "id" ? "Perjalanan " : "Trip ") + (index+1)); card.appendChild(title);
+        const details = document.createElement("p"); details.textContent = trip.text; card.appendChild(details);
+        const actions = document.createElement("div"); actions.className = "actions";
+        const copy = document.createElement("button"); copy.className = "btn btn-primary"; copy.textContent = language === "id" ? "Muat ke editor" : "Load into editor"; copy.onclick = () => { latestItineraryText = trip.text; document.getElementById("itinerary-destination").value = trip.destination || ""; document.getElementById("itineraryResult").textContent = trip.text; document.getElementById("plannerStatus").textContent = language === "id" ? "Itinerary tersimpan dimuat sebagai teks. Buat ulang jika ingin mengubah detail." : "Saved itinerary loaded as text. Rebuild it to change details."; document.getElementById("planner").scrollIntoView({behavior:"smooth"}); };
+        const remove = document.createElement("button"); remove.className = "btn btn-light"; remove.textContent = language === "id" ? "Hapus" : "Remove"; remove.onclick = () => { const current = readLocalList(SAVED_TRIPS_KEY); current.splice(index,1); writeLocalList(SAVED_TRIPS_KEY,current); renderSavedItems(); };
+        actions.append(copy,remove); card.appendChild(actions); tripGrid.appendChild(card);
+      });
+      document.getElementById("wishlistEmpty").hidden = wishlist.length > 0;
+      document.getElementById("savedTripsEmpty").hidden = trips.length > 0;
+    }
+    function saveItinerary() {
+      if (!latestItineraryText.trim()) { alert(language === "id" ? "Buat itinerary terlebih dahulu." : "Build an itinerary first."); return; }
+      const trips = readLocalList(SAVED_TRIPS_KEY);
+      const destination = val("itinerary-destination");
+      trips.unshift({title:destination || (language === "id" ? "Perjalanan tersimpan" : "Saved trip"),destination,text:latestItineraryText,savedAt:new Date().toISOString()});
+      if (!writeLocalList(SAVED_TRIPS_KEY,trips.slice(0,30))) {
+        alert(language === "id" ? "Tidak dapat menyimpan di browser ini. Coba browser biasa dan aktifkan penyimpanan situs." : "Could not save in this browser. Try a regular browser with site storage enabled."); return;
+      }
+      renderSavedItems();
+      document.getElementById("plannerStatus").textContent = language === "id" ? "Itinerary tersimpan di perangkat ini." : "Itinerary saved on this device.";
+    }
+
+    function money(value, currency) {
+      try { return new Intl.NumberFormat(language === "id" ? "id-ID" : "en-US", {style:"currency",currency:currency,maximumFractionDigits:currency==="IDR"||currency==="JPY"?0:2}).format(value); }
+      catch(e) { return currency + " " + value.toLocaleString(); }
+    }
+    function calculateBudget() {
+      const currency = val("budget-currency"), people = Number(val("budget-people"));
+      if (!Number.isInteger(people) || people < 1 || people > 100) { alert(language === "id" ? "Jumlah orang harus antara 1 dan 100." : "Number of people must be between 1 and 100."); return; }
+      const ids = ["budget-transport","budget-stay","budget-food","budget-activities","budget-extra"];
+      const values = ids.map(id => Number(val(id) || 0));
+      if (values.some(v => !Number.isFinite(v) || v < 0)) { alert(language === "id" ? "Biaya harus berupa angka nol atau lebih." : "Costs must be zero or greater."); return; }
+      const total = values.reduce((sum,v) => sum + v, 0);
+      document.getElementById("budgetTotal").textContent = money(total,currency);
+      const days = Number(val("budget-days"));
+      if (!Number.isInteger(days) || days < 1 || days > 365) { alert(language === "id" ? "Durasi harus antara 1 dan 365 hari." : "Duration must be between 1 and 365 days."); return; }
+      document.getElementById("budgetPerPerson").textContent = (language === "id" ? "Per orang: " : "Per person: ") + money(total/people,currency);
+      document.getElementById("budgetPerDay").textContent = (language === "id" ? "Per orang per hari: " : "Per person per day: ") + money(total/(people*days),currency);
+    }
+    function resetBudget() {
+      ["budget-transport","budget-stay","budget-food","budget-activities","budget-extra"].forEach(id => document.getElementById(id).value = "0");
+      document.getElementById("budget-people").value = "1";
+      document.getElementById("budget-days").value = "3";
+      calculateBudget();
+    }
+    document.getElementById("budget-currency").addEventListener("change", calculateBudget);
+    document.getElementById("budget-people").addEventListener("input", calculateBudget);
+    document.getElementById("budget-days").addEventListener("input", calculateBudget);
+    ["budget-transport","budget-stay","budget-food","budget-activities","budget-extra"].forEach(id => document.getElementById(id).addEventListener("input", calculateBudget));
+    applyLanguage();
+    renderDestinations();
+    renderSavedItems();
+    calculateBudget();
   </script>
-<section id="maps-tool" style="padding:32px 6%;background:#f7f6f0;">
-  <h2>Explore the World with GlobeTrip 🗺️</h2>
-  <p>Find destinations and plan your route.</p>
-
-  <label for="map-destination">Destination</label>
-  <input id="map-destination" type="text"
-    placeholder="Example: Bali, Indonesia"
-    style="display:block;width:100%;padding:14px;margin:10px 0;border:1px solid #ccc;border-radius:10px;">
-
-  <label for="map-origin">Starting point (optional)</label>
-  <input id="map-origin" type="text"
-    placeholder="Example: Wakatobi, Indonesia"
-    style="display:block;width:100%;padding:14px;margin:10px 0;border:1px solid #ccc;border-radius:10px;">
-
-  <label for="map-mode">Travel mode</label>
-  <select id="map-mode"
-    style="display:block;width:100%;padding:14px;margin:10px 0;border:1px solid #ccc;border-radius:10px;">
-    <option value="driving">Car</option>
-    <option value="walking">Walking</option>
-    <option value="bicycling">Bicycle</option>
-    <option value="transit">Public transport</option>
-  </select>
-
-  <button onclick="globeTripSearch()"
-    style="padding:13px 18px;margin:8px 5px 8px 0;background:#087e80;color:white;border:0;border-radius:10px;">
-    Search destination
-  </button>
-
-  <button onclick="globeTripDirections()"
-    style="padding:13px 18px;margin:8px 0;background:#123047;color:white;border:0;border-radius:10px;">
-    Get directions
-  </button>
-
-  <p style="font-size:14px;color:#555;">
-    Maps and route results open in Google Maps.
-  </p>
-</section>
-
-<script>
-function globeTripSearch() {
-  const destination =
-    document.getElementById("map-destination").value.trim();
-
-  if (!destination) {
-    alert("Please enter a destination first.");
-    return;
-  }
-
-  const url =
-    "https://www.google.com/maps/search/?api=1&query=" +
-    encodeURIComponent(destination);
-
-  window.open(url, "_blank");
-}
-
-function globeTripDirections() {
-  const destination =
-    document.getElementById("map-destination").value.trim();
-
-  const origin =
-    document.getElementById("map-origin").value.trim();
-
-  const mode =
-    document.getElementById("map-mode").value;
-
-  if (!destination) {
-    alert("Please enter a destination first.");
-    return;
-  }
-
-  let url =
-    "https://www.google.com/maps/dir/?api=1&destination=" +
-    encodeURIComponent(destination) +
-    "&travelmode=" + encodeURIComponent(mode);
-
-  if (origin) {
-    url += "&origin=" + encodeURIComponent(origin);
-  }
-
-  window.open(url, "_blank");
-}
-</script>
-
-<section id="booking-hub" class="booking-hub">
-  <div class="booking-heading">
-    <span class="booking-eyebrow">YOUR NEXT ADVENTURE</span>
-    <h2>✈️ Travel Booking Hub</h2>
-    <p>From planning to takeoff, your journey starts here.</p>
-  </div>
-
-  <div class="booking-panel">
-    <div class="booking-field">
-      <label for="booking-from">📍 Departure City</label>
-      <input id="booking-from" type="text"
-        placeholder="Where are you leaving from?">
-    </div>
-
-    <div class="booking-field">
-      <label for="booking-to">🌍 Destination</label>
-      <input id="booking-to" type="text"
-        placeholder="Where do you want to go?">
-    </div>
-
-    <div class="booking-field">
-      <label for="booking-depart">🗓️ Departure Date</label>
-      <input id="booking-depart" type="date">
-    </div>
-
-    <div class="booking-field">
-      <label for="booking-return">🗓️ Return Date (Optional)</label>
-      <input id="booking-return" type="date">
-    </div>
-
-    <div class="booking-field booking-guests">
-      <label for="booking-guests">👥 Travelers</label>
-      <input id="booking-guests" type="number"
-        min="1" max="20" value="1">
-    </div>
-
-    <div class="booking-actions">
-      <button type="button" class="flight-btn"
-        onclick="gtSearchFlights()">
-        ✈️ Search Flights
-      </button>
-
-      <button type="button" class="hotel-btn"
-        onclick="gtSearchHotels()">
-        🏨 Find Hotels
-      </button>
-
-      <button type="button" class="transport-btn"
-        onclick="gtSearchTransport()">
-        🚆 Find Transport
-      </button>
-    </div>
-
-    <p class="booking-note">
-      Prices and availability are provided by external services
-      and may change. GlobeTrip does not directly sell tickets
-      or confirm bookings.
-    </p>
-  </div>
-</section>
-  
-<script>
-function gtValue(id) {
-  return document.getElementById(id).value.trim();
-}
-
-function gtSearchFlights() {
-  const from = gtValue("booking-from");
-  const to = gtValue("booking-to");
-  const depart = gtValue("booking-depart");
-  const back = gtValue("booking-return");
-
-  if (!from || !to) {
-    alert("Please enter your departure city and destination.");
-    return;
-  }
-
-  let query = "flights from " + from + " to " + to;
-  if (depart) query += " on " + depart;
-  if (back) query += " return " + back;
-
-  window.open(
-    "https://www.google.com/travel/flights?q=" +
-    encodeURIComponent(query),
-    "_blank"
-  );
-}
-
-function gtSearchHotels() {
-  const to = gtValue("booking-to");
-  const depart = gtValue("booking-depart");
-  const back = gtValue("booking-return");
-  const guests = gtValue("booking-guests") || "1";
-
-  if (!to) {
-    alert("Please enter your destination first.");
-    return;
-  }
-
-  let query = to + " hotels";
-  if (depart) query += " check-in " + depart;
-  if (back) query += " check-out " + back;
-  query += " for " + guests + " guests";
-
-  window.open(
-    "https://www.google.com/travel/hotels?q=" +
-    encodeURIComponent(query),
-    "_blank"
-  );
-}
-
-
-function gtSearchTransport() {
-  const from = gtValue("booking-from");
-  const to = gtValue("booking-to");
-
-  if (!to) {
-    alert("Please enter your destination first.");
-    return;
-  }
-
-  let url;
-
-  if (from) {
-    url =
-      "https://www.google.com/maps/dir/?api=1" +
-      "&origin=" + encodeURIComponent(from) +
-      "&destination=" + encodeURIComponent(to) +
-      "&travelmode=transit";
-  } else {
-    url =
-      "https://www.google.com/maps/search/?api=1" +
-      "&query=" +
-      encodeURIComponent("public transport in " + to);
-  }
-
-  window.open(url, "_blank");
-}
-
-function filterDestinations(category, button) {
-  const cards = document.querySelectorAll(
-    ".destination-card"
-  );
-
-  cards.forEach(card => {
-    const matches =
-      category === "all" ||
-      card.dataset.category === category;
-
-    card.hidden = !matches;
-  });
-
-  document.querySelectorAll(
-    ".destination-filter"
-  ).forEach(filter => {
-    filter.classList.remove("active");
-  });
-
-  button.classList.add("active");
-  }
-  
-</script>
-  
 </body>
 </html>
+    

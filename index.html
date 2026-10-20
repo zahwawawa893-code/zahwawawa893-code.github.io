@@ -364,5 +364,122 @@ function globeTripDirections() {
   window.open(url, "_blank");
 }
 </script>
+
+<section id="booking-hub" style="padding:32px 6%;background:#fffaf0;color:#123047;">
+  <h2>✈️ Travel Booking Hub</h2>
+  <p>Plan your journey, compare options, and find your next stay.</p>
+
+  <label for="booking-from">Departure city / Kota asal</label>
+  <input id="booking-from" placeholder="Example: Jakarta"
+    style="box-sizing:border-box;width:100%;padding:12px;margin:8px 0 16px;border:1px solid #ccc;border-radius:10px;">
+
+  <label for="booking-to">Destination / Kota tujuan</label>
+  <input id="booking-to" placeholder="Example: Bali"
+    style="box-sizing:border-box;width:100%;padding:12px;margin:8px 0 16px;border:1px solid #ccc;border-radius:10px;">
+
+  <label for="booking-depart">Departure date / Tanggal berangkat</label>
+  <input id="booking-depart" type="date"
+    style="box-sizing:border-box;width:100%;padding:12px;margin:8px 0 16px;border:1px solid #ccc;border-radius:10px;">
+
+  <label for="booking-return">Return date / Tanggal pulang (optional)</label>
+  <input id="booking-return" type="date"
+    style="box-sizing:border-box;width:100%;padding:12px;margin:8px 0 16px;border:1px solid #ccc;border-radius:10px;">
+
+  <label for="booking-guests">Travelers / Jumlah tamu</label>
+  <input id="booking-guests" type="number" min="1" max="20" value="1"
+    style="box-sizing:border-box;width:100%;padding:12px;margin:8px 0 20px;border:1px solid #ccc;border-radius:10px;">
+
+  <button type="button" onclick="gtSearchFlights()"
+    style="padding:13px;margin:4px;background:#087e80;color:white;border:0;border-radius:10px;">
+    Search Flights ✈️
+  </button>
+
+  <button type="button" onclick="gtSearchHotels()"
+    style="padding:13px;margin:4px;background:#123047;color:white;border:0;border-radius:10px;">
+    Find Hotels 🏨
+  </button>
+
+  <button type="button" onclick="gtSearchTransport()"
+    style="padding:13px;margin:4px;background:#e87856;color:white;border:0;border-radius:10px;">
+    Find Transport 🚆
+  </button>
+
+  <p style="font-size:13px;color:#555;margin-top:16px;">
+    Prices and availability are provided by external services and may change.
+    GlobeTrip does not sell tickets or confirm bookings directly.
+  </p>
+</section>
+
+<script>
+function gtValue(id) {
+  return document.getElementById(id).value.trim();
+}
+
+function gtSearchFlights() {
+  const from = gtValue("booking-from");
+  const to = gtValue("booking-to");
+  const depart = gtValue("booking-depart");
+  const back = gtValue("booking-return");
+
+  if (!from || !to) {
+    alert("Please enter your departure city and destination.");
+    return;
+  }
+
+  let query = "flights from " + from + " to " + to;
+  if (depart) query += " on " + depart;
+  if (back) query += " return " + back;
+
+  window.open(
+    "https://www.google.com/travel/flights?q=" +
+    encodeURIComponent(query),
+    "_blank"
+  );
+}
+
+function gtSearchHotels() {
+  const to = gtValue("booking-to");
+  const depart = gtValue("booking-depart");
+  const back = gtValue("booking-return");
+  const guests = gtValue("booking-guests") || "1";
+
+  if (!to) {
+    alert("Please enter your destination first.");
+    return;
+  }
+
+  let query = to + " hotels";
+  if (depart) query += " check-in " + depart;
+  if (back) query += " check-out " + back;
+  query += " for " + guests + " guests";
+
+  window.open(
+    "https://www.google.com/travel/hotels?q=" +
+    encodeURIComponent(query),
+    "_blank"
+  );
+}
+
+function gtSearchTransport() {
+  const from = gtValue("booking-from");
+  const to = gtValue("booking-to");
+
+  if (!to) {
+    alert("Please enter your destination first.");
+    return;
+  }
+
+  const query = from
+    ? "transport from " + from + " to " + to
+    : "transport in " + to;
+
+  window.open(
+    "https://www.google.com/search?q=" +
+    encodeURIComponent(query),
+    "_blank"
+  );
+}
+</script>
+  
 </body>
 </html>

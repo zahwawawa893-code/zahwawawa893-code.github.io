@@ -282,5 +282,87 @@
         language === "id" ? "EN" : "ID";
     }
   </script>
+<section id="maps-tool" style="padding:32px 6%;background:#f7f6f0;">
+  <h2>Explore the World with GlobeTrip 🗺️</h2>
+  <p>Find destinations and plan your route.</p>
+
+  <label for="map-destination">Destination</label>
+  <input id="map-destination" type="text"
+    placeholder="Example: Bali, Indonesia"
+    style="display:block;width:100%;padding:14px;margin:10px 0;border:1px solid #ccc;border-radius:10px;">
+
+  <label for="map-origin">Starting point (optional)</label>
+  <input id="map-origin" type="text"
+    placeholder="Example: Wakatobi, Indonesia"
+    style="display:block;width:100%;padding:14px;margin:10px 0;border:1px solid #ccc;border-radius:10px;">
+
+  <label for="map-mode">Travel mode</label>
+  <select id="map-mode"
+    style="display:block;width:100%;padding:14px;margin:10px 0;border:1px solid #ccc;border-radius:10px;">
+    <option value="driving">Car</option>
+    <option value="walking">Walking</option>
+    <option value="bicycling">Bicycle</option>
+    <option value="transit">Public transport</option>
+  </select>
+
+  <button onclick="globeTripSearch()"
+    style="padding:13px 18px;margin:8px 5px 8px 0;background:#087e80;color:white;border:0;border-radius:10px;">
+    Search destination
+  </button>
+
+  <button onclick="globeTripDirections()"
+    style="padding:13px 18px;margin:8px 0;background:#123047;color:white;border:0;border-radius:10px;">
+    Get directions
+  </button>
+
+  <p style="font-size:14px;color:#555;">
+    Maps and route results open in Google Maps.
+  </p>
+</section>
+
+<script>
+function globeTripSearch() {
+  const destination =
+    document.getElementById("map-destination").value.trim();
+
+  if (!destination) {
+    alert("Please enter a destination first.");
+    return;
+  }
+
+  const url =
+    "https://www.google.com/maps/search/?api=1&query=" +
+    encodeURIComponent(destination);
+
+  window.open(url, "_blank");
+}
+
+function globeTripDirections() {
+  const destination =
+    document.getElementById("map-destination").value.trim();
+
+  const origin =
+    document.getElementById("map-origin").value.trim();
+
+  const mode =
+    document.getElementById("map-mode").value;
+
+  if (!destination) {
+    alert("Please enter a destination first.");
+    return;
+  }
+
+  let url =
+    "https://www.google.com/maps/dir/?api=1&destination=" +
+    encodeURIComponent(destination) +
+    "&travelmode=" + encodeURIComponent(mode);
+
+  if (origin) {
+    url += "&origin=" + encodeURIComponent(origin);
+  }
+
+  window.open(url, "_blank");
+}
+</script>
 </body>
 </html>

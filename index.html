@@ -460,6 +460,7 @@ function gtSearchHotels() {
   );
 }
 
+
 function gtSearchTransport() {
   const from = gtValue("booking-from");
   const to = gtValue("booking-to");
@@ -469,16 +470,24 @@ function gtSearchTransport() {
     return;
   }
 
-  const query = from
-    ? "transport from " + from + " to " + to
-    : "transport in " + to;
+  let url;
 
-  window.open(
-    "https://www.google.com/search?q=" +
-    encodeURIComponent(query),
-    "_blank"
-  );
+  if (from) {
+    url =
+      "https://www.google.com/maps/dir/?api=1" +
+      "&origin=" + encodeURIComponent(from) +
+      "&destination=" + encodeURIComponent(to) +
+      "&travelmode=transit";
+  } else {
+    url =
+      "https://www.google.com/maps/search/?api=1" +
+      "&query=" +
+      encodeURIComponent("public transport in " + to);
+  }
+
+  window.open(url, "_blank");
 }
+  
 </script>
   
 </body>

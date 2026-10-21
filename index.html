@@ -341,7 +341,7 @@
     };
 
     function toggleLanguage() {
-      language = language === "en" ? "id" : "id";
+      language = language === "en" ? "id" : "en";
       applyLanguage();
       if (typeof renderDestinations === "function") renderDestinations();
       if (typeof renderSavedItems === "function") renderSavedItems();
@@ -358,7 +358,7 @@
         const key = el.getAttribute("data-i18n-placeholder");
         if (dict[key]) el.placeholder = dict[key];
       });
-    
+    } 
 
     // Destination library: highlights and seasonal advice are general planning guidance.
     const destinationData = [

@@ -1983,13 +1983,15 @@
  };
        
 function destinationImage(id) {
-  // Use complete image URLs directly; otherwise use Unsplash photo IDs.
+  if (typeof id !== "string" || !id.trim()) {
+    return "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=80";
+  }
+  id = id.replace(/[\u200B-\u200D\u2060\uFEFF]/g, "").trim();
   if (id.startsWith("https://") || id.startsWith("http://")) {
     return id;
   }
   return "https://images.unsplash.com/" + id + "?auto=format&fit=crop&w=900&q=80";
-}
-    
+}  
     function renderDestinations() {
       const grid = document.getElementById("destinationGrid");
       const id = language === "id";

@@ -2311,10 +2311,24 @@ function destinationImage(id) {
     document.getElementById("budget-currency").addEventListener("change", calculateBudget);
     document.getElementById("budget-people").addEventListener("input", calculateBudget);
     document.getElementById("budget-days").addEventListener("input", calculateBudget);
-    ["budget-transport","budget-stay","budget-food","budget-activities","budget-extra"].forEach(id => document.getElementById(id).addEventListener("input", calculateBudget));
+    ["budget-transport","budget-stay","budget-food","budget-activities","budget-extra"].forEach(id => document.getElementById(id).addEventListener("input", calculateBudget));    
+ 
     applyLanguage();
-    renderDestinations();
-    renderSavedItems();
+
+    try {
+      renderDestinations();
+    } catch (error) {
+      const grid = document.getElementById("destinationGrid");
+      if (grid) {
+        grid.innerHTML =
+          "<p style='color:red;padding:16px'>Error destinasi: " +
+          String(error.message) +
+          "</p>";
+      }
+      console.error(error);
+    }
+    
+   renderSavedItems();
     calculateBudget();
   </script>
 </body>
